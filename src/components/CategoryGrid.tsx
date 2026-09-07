@@ -1,6 +1,5 @@
 import React from 'react';
-import { ArrowRight, Layers } from 'lucide-react';
-import { CATEGORIES } from '../data/storeData';
+import { CIRCULAR_CATEGORIES } from '../data/storeData';
 
 interface CategoryGridProps {
   onSelectCategory: (slug: string) => void;
@@ -8,72 +7,60 @@ interface CategoryGridProps {
 
 export const CategoryGrid: React.FC<CategoryGridProps> = ({ onSelectCategory }) => {
   return (
-    <section id="shop-categories" className="py-10 sm:py-14 bg-stone-50 border-b border-stone-200">
-      <div className="w-full max-w-[1600px] mx-auto px-[clamp(20px,4vw,64px)]">
-        {/* Section Header */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-8">
-          <div>
-            <div className="flex items-center gap-1.5 text-xs font-bold text-[var(--accent)] uppercase tracking-wider mb-1">
-              <Layers className="w-3.5 h-3.5" />
-              <span>Explore Materials &amp; Products</span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight">
+    <section id="shop-categories" className="py-8 sm:py-10 bg-white border-b border-stone-100">
+      <div className="w-full max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-14">
+        
+        {/* Header */}
+        <div className="flex items-center justify-between gap-2 mb-6">
+          <div className="text-left">
+            <h2 className="text-xl sm:text-2xl font-bold text-stone-900 tracking-tight">
               Shop by Category
             </h2>
+            <p className="text-xs sm:text-sm text-stone-500 mt-0.5">
+              Explore custom printing formats crafted for Indian home walls and desk decor
+            </p>
           </div>
-          <p className="text-xs sm:text-sm text-stone-600 max-w-md">
-            Browse our wide range of custom printed products tailored for home decor, gifting and commercial needs.
-          </p>
+          <button
+            type="button"
+            onClick={() => onSelectCategory('canvas-prints')}
+            className="text-xs sm:text-sm font-semibold text-[var(--accent)] hover:underline cursor-pointer whitespace-nowrap hidden sm:block"
+          >
+            All Categories →
+          </button>
         </div>
 
-        {/* Categories Grid - 9 major cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 xl:gap-7">
-          {CATEGORIES.map((cat) => (
-            <div
+        {/* Clean Circular Categories without box cards */}
+        <div className="flex items-start justify-between gap-4 sm:gap-6 xl:gap-8 overflow-x-auto pb-2 pt-1 scrollbar-none">
+          {CIRCULAR_CATEGORIES.map((cat) => (
+            <button
               key={cat.id}
+              type="button"
               onClick={() => onSelectCategory(cat.slug)}
-              className="group bg-white rounded-xl border border-stone-200 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer flex flex-col justify-between"
+              className="group flex flex-col items-center text-center shrink-0 w-24 sm:w-28 cursor-pointer focus:outline-none"
             >
-              {/* Product Image Area */}
-              <div className="relative aspect-[16/10] overflow-hidden bg-stone-100">
+              {/* Clean Circular Thumbnail */}
+              <div className="w-18 h-18 sm:w-22 sm:h-22 rounded-full overflow-hidden bg-stone-100 border border-stone-200 group-hover:border-[var(--accent)] transition-all group-hover:scale-105">
                 <img
                   src={cat.image}
                   alt={cat.name}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  className="w-full h-full object-cover rounded-full"
+                  loading="lazy"
                 />
-                <div className="absolute top-3 right-3 bg-white/95 backdrop-blur-sm text-stone-800 text-[11px] font-bold px-2.5 py-1 rounded shadow-sm border border-stone-200">
-                  from <span className="text-[var(--accent)]">₹{cat.startingPrice}</span>
-                </div>
-                <div className="absolute bottom-3 left-3 bg-black/70 backdrop-blur-sm text-white text-[10px] font-medium px-2 py-0.5 rounded">
-                  {cat.popularItem}
-                </div>
               </div>
 
-              {/* Card Body */}
-              <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between">
-                <div>
-                  <h3 className="text-base sm:text-lg font-bold text-stone-900 group-hover:text-[var(--accent)] transition-colors">
-                    {cat.name}
-                  </h3>
-                  <p className="text-xs sm:text-sm text-stone-500 mt-1.5 leading-relaxed">
-                    {cat.description}
-                  </p>
-                </div>
+              {/* Name */}
+              <span className="mt-2 text-xs sm:text-[13px] font-semibold text-stone-900 group-hover:text-[var(--accent)] transition-colors line-clamp-1">
+                {cat.name}
+              </span>
 
-                {/* Card Footer Button */}
-                <div className="mt-4 pt-3 border-t border-stone-100 flex items-center justify-between">
-                  <span className="text-xs font-semibold text-stone-600">
-                    High-definition print
-                  </span>
-                  <button className="px-3 py-1.5 bg-stone-100 group-hover:bg-[var(--accent)] text-stone-800 group-hover:text-white rounded-md text-xs font-bold flex items-center gap-1.5 transition-colors">
-                    <span>Shop Now</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              </div>
-            </div>
+              {/* Starting Price */}
+              <span className="text-[11px] font-medium text-stone-500 mt-0.5">
+                From ₹{cat.startingPrice}
+              </span>
+            </button>
           ))}
         </div>
+
       </div>
     </section>
   );

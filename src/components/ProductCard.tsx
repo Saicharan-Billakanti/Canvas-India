@@ -1,5 +1,5 @@
 import React from 'react';
-import { Star, Heart, ShoppingCart, SlidersHorizontal, Check } from 'lucide-react';
+import { Star, Heart, ShoppingCart, SlidersHorizontal, Truck, ArrowRight } from 'lucide-react';
 import { Product } from '../types';
 
 interface ProductCardProps {
@@ -8,6 +8,7 @@ interface ProductCardProps {
   onToggleWishlist: (productId: string) => void;
   onAddToCart: (product: Product) => void;
   onCustomize: (product: Product) => void;
+  variant?: 'default' | 'version2' | 'unboxed' | 'marketplace' | 'print-store' | 'modern';
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({
@@ -16,119 +17,112 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   onToggleWishlist,
   onAddToCart,
   onCustomize,
+  variant = 'default',
 }) => {
-  const getBadgeStyle = (badge?: string) => {
-    switch (badge) {
-      case 'Best Seller':
-        return 'bg-amber-500 text-white';
-      case 'Sale':
-        return 'bg-[var(--accent)] text-white';
-      case 'Trending':
-        return 'bg-[#0F243E] text-white';
-      case 'Hot':
-        return 'bg-rose-600 text-white';
-      default:
-        return 'bg-stone-800 text-white';
-    }
-  };
+  const isV2 = variant === 'version2' || variant === 'print-store' || variant === 'unboxed';
+  const isModern = variant === 'modern';
+  const isMarketplace = variant === 'marketplace' || variant === 'default';
+
+  // Accent color variables per variant
+  const accentText = isV2 ? 'text-[#C94F32]' : isModern ? 'text-amber-800' : 'text-[var(--accent)]';
+  const accentHoverText = isV2 ? 'group-hover:text-[#C94F32]' : isModern ? 'group-hover:text-amber-800' : 'group-hover:text-[var(--accent)]';
+  const discountBg = isV2 ? 'bg-[#C94F32]' : isModern ? 'bg-amber-800' : 'bg-rose-600';
 
   return (
-    <div className="group bg-white rounded-xl border border-stone-200 overflow-hidden shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between">
-      
-      {/* Product Image Container */}
-      <div className="relative aspect-square overflow-hidden bg-stone-100">
-        <img
-          src={product.image}
-          alt={product.name}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-          loading="lazy"
-        />
-
-        {/* Badge */}
-        {product.badge && (
-          <div className={`absolute top-2.5 left-2.5 text-[10px] font-extrabold uppercase px-2 py-0.5 rounded shadow-sm tracking-wide ${getBadgeStyle(product.badge)}`}>
-            {product.badge}
-          </div>
-        )}
-
-        {/* Wishlist Heart Button */}
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            onToggleWishlist(product.id);
-          }}
-          className={`absolute top-2.5 right-2.5 w-7 h-7 rounded-full flex items-center justify-center transition-colors shadow-sm ${
-            isWishlisted 
-              ? 'bg-rose-50 text-rose-600' 
-              : 'bg-white/90 text-stone-600 hover:text-rose-600 hover:bg-white'
-          }`}
-          aria-label="Wishlist"
+    <div className="group flex flex-col justify-between text-left select-none">
+      <div>
+        {/* Compact Product Image (approx 120-160px visual height, unboxed, floating) */}
+        <div 
+          className="relative aspect-square max-h-[160px] w-full rounded-lg overflow-hidden bg-stone-100 cursor-pointer"
+          onClick={() => onCustomize(product)}
         >
-          <Heart className={`w-4 h-4 ${isWishlisted ? 'fill-rose-600' : ''}`} />
-        </button>
+          <img
+            src={product.image}
+            alt={product.name}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            loading="lazy"
+          />
 
-        {/* Discount Tag on bottom edge */}
-        <div className="absolute bottom-2 left-2 bg-[var(--accent-hover)] text-white text-[10px] font-bold px-1.5 py-0.5 rounded">
-          {product.discountPercent}% OFF
-        </div>
-      </div>
-
-      {/* Product Content Details */}
-      <div className="p-3 sm:p-3.5 flex-1 flex flex-col justify-between">
-        <div>
-          {/* Category Tag */}
-          <div className="text-[11px] font-medium text-stone-400 uppercase tracking-wider">
-            {product.category}
-          </div>
-
-          {/* Product Name */}
-          <h3 className="font-bold text-xs sm:text-sm text-stone-900 line-clamp-1 group-hover:text-[var(--accent)] transition-colors mt-0.5">
-            {product.name}
-          </h3>
-
-          {/* Star Rating */}
-          <div className="flex items-center gap-1.5 mt-1 text-[11px] text-stone-500">
-            <div className="flex items-center text-amber-500">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} className="w-3 h-3 fill-amber-500" />
-              ))}
+          {/* Subtle Discount Pill */}
+          {product.discountPercent > 0 && (
+            <div className={`absolute top-2 left-2 ${discountBg} text-white text-[9px] font-black uppercase px-1.5 py-0.5 rounded shadow-2xs tracking-wide`}>
+              {product.discountPercent}% OFF
             </div>
-            <span className="font-semibold text-stone-700">{product.rating}</span>
-            <span className="text-stone-400">({product.reviewsCount})</span>
-          </div>
+          )}
 
-          {/* Price Row */}
-          <div className="flex items-baseline gap-2 mt-2">
-            <span className="text-base sm:text-lg font-extrabold text-stone-900">
-              ₹{product.price.toLocaleString('en-IN')}
-            </span>
-            <span className="text-xs text-stone-400 line-through">
-              ₹{product.originalPrice.toLocaleString('en-IN')}
-            </span>
-          </div>
-        </div>
-
-        {/* Action Buttons: Add to Cart & Customize */}
-        <div className="grid grid-cols-2 gap-2 mt-3 pt-2.5 border-t border-stone-100">
+          {/* Subtle Wishlist Heart on Top Right */}
           <button
-            onClick={() => onAddToCart(product)}
-            className="w-full py-1.5 px-2 bg-stone-100 hover:bg-stone-200 text-stone-800 text-xs font-bold rounded-md flex items-center justify-center gap-1 transition-colors"
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onToggleWishlist(product.id);
+            }}
+            className="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/90 hover:bg-white text-stone-600 hover:text-rose-600 flex items-center justify-center transition-all shadow-xs"
+            aria-label="Wishlist"
+            title={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
           >
-            <ShoppingCart className="w-3.5 h-3.5" />
-            <span className="truncate">Add to Cart</span>
-          </button>
-
-          <button
-            onClick={() => onCustomize(product)}
-            className="w-full py-1.5 px-2 bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white text-xs font-bold rounded-md flex items-center justify-center gap-1 transition-colors shadow-sm"
-          >
-            <SlidersHorizontal className="w-3.5 h-3.5" />
-            <span className="truncate">Customize</span>
+            <Heart className={`w-3.5 h-3.5 ${isWishlisted ? 'fill-rose-600 text-rose-600' : ''}`} />
           </button>
         </div>
 
+        {/* Title */}
+        <h4 
+          onClick={() => onCustomize(product)}
+          className={`font-semibold text-xs sm:text-[13px] text-stone-900 line-clamp-1 ${accentHoverText} transition-colors mt-2 cursor-pointer`}
+          title={product.name}
+        >
+          {product.name}
+        </h4>
+
+        {/* Pricing Row */}
+        <div className="flex items-baseline gap-1.5 mt-0.5">
+          <span className="text-sm sm:text-base font-extrabold text-stone-900">
+            ₹{product.price.toLocaleString('en-IN')}
+          </span>
+          <span className="text-[11px] text-stone-400 line-through">
+            ₹{product.originalPrice.toLocaleString('en-IN')}
+          </span>
+          {isMarketplace && product.discountPercent > 0 && (
+            <span className="text-[10px] font-bold text-emerald-700 hidden sm:inline">
+              {product.discountPercent}% off
+            </span>
+          )}
+        </div>
+
+        {/* Rating */}
+        <div className="flex items-center gap-1.5 mt-0.5 text-[11px] text-stone-500">
+          {isMarketplace ? (
+            <span className="inline-flex items-center gap-0.5 bg-emerald-700 text-white text-[10px] font-extrabold px-1.5 py-0.2 rounded leading-none">
+              <span>{product.rating}</span>
+              <Star className="w-2.5 h-2.5 fill-white text-white" />
+            </span>
+          ) : (
+            <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
+          )}
+          {!isMarketplace && <span className="font-bold text-stone-800">{product.rating}</span>}
+          <span className="text-stone-400">({product.reviewsCount})</span>
+        </div>
       </div>
 
+      {/* Small Clean Action CTA */}
+      <div className="mt-2 pt-1 flex items-center gap-2">
+        <button
+          type="button"
+          onClick={() => onCustomize(product)}
+          className={`text-[11px] font-bold ${accentText} hover:text-stone-950 flex items-center gap-1 transition-colors cursor-pointer`}
+        >
+          <span>Customize</span>
+          <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+        </button>
+        <span className="text-stone-300">•</span>
+        <button
+          type="button"
+          onClick={() => onAddToCart(product)}
+          className="text-[11px] font-medium text-stone-600 hover:text-stone-900 transition-colors cursor-pointer"
+        >
+          + Add
+        </button>
+      </div>
     </div>
   );
 };
