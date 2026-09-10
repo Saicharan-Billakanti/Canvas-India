@@ -59,6 +59,18 @@ const PERMISSIONS = [
   'bom.manage',
   'materials.view',
   'materials.adjust',
+
+  // Growth (Phase 5)
+  'discounts.view',
+  'discounts.manage',
+  'promotions.view',
+  'promotions.manage',
+  'campaigns.view',
+  'campaigns.manage',
+  'segments.view',
+  'segments.manage',
+  'abandoned_carts.view',
+  'abandoned_carts.manage',
 ];
 
 async function main() {
@@ -181,10 +193,82 @@ async function main() {
     },
   });
 
+  // Phase 5: Growth — seed a demo segment, campaign, discount & promotion.
+  const vipSegment = await prisma.customerSegment.upsert({
+    where: { slug: 'vip-customers' },
+    update: {},
+    create: {
+      name: 'VIP Customers',
+      slug: 'vip-customers',
+      description: 'Customers with lifetime spend ≥ ₹10,000 or ≥ 5 orders',
+      type: 'DYNAMIC',
+      criteria: {
+        minSpend: 10000,
+        minOrders: 5,
+      },
+      isActive: true,
+    },
+  });
+
+  const launchCampaign = await prisma.campaign.upsert({
+    where: { code: 'LAUNCH2025' },
+    update: {},
+    create: {
+      name: 'Annual Launch 2025',
+      code: 'LAUNCH2025',
+      description: 'Year-round launch campaign bundling all promotional offers',
+      type: 'SEASONAL',
+      status: 'DRAFT',
+      startsAt: new Date('2025-01-01T00:00:00Z'),
+      endsAt: new Date('2025-12-31T23:59:59Z'),
+      budget: 500000,
+      targetSegmentId: vipSegment.id,
+    },
+  });
+
+  await prisma.discount.upsert({
+    where: { code: 'WELCOME10' },
+    update: {},
+    create: {
+      code: 'WELCOME10',
+      description: '10% off for new customers, max ₹500 discount',
+      discountType: 'PERCENTAGE',
+      value: 10,
+      maxDiscountAmount: 500,
+      minOrderSubtotal: 999,
+      usageLimit: 1000,
+      perCustomerLimit: 1,
+      isActive: true,
+      isExclusive: false,
+      campaignId: launchCampaign.id,
+    },
+  });
+
+  await prisma.promotion.upsert({
+    where: { slug: 'flat100-on-2k' },
+    update: {},
+    create: {
+      name: 'Flat ₹100 off on orders above ₹2,000',
+      slug: 'flat100-on-2k',
+      description: 'Automatic ₹100 discount applied to orders above ₹2,000',
+      promotionType: 'AUTOMATIC_DISCOUNT',
+      discountType: 'FIXED_AMOUNT',
+      value: 100,
+      minOrderSubtotal: 2000,
+      priority: 10,
+      isStackable: true,
+      startsAt: new Date('2025-01-01T00:00:00Z'),
+      endsAt: new Date('2025-12-31T23:59:59Z'),
+      isActive: true,
+      campaignId: launchCampaign.id,
+    },
+  });
+
   // eslint-disable-next-line no-console
   console.log(
     `Seed complete. Super admin login: ${seedEmail} / ${seedPassword}`,
   );
+
 }
 
 main()

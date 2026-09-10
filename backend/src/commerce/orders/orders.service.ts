@@ -4,6 +4,8 @@ import { PrismaService } from '../../database/prisma.service.js';
 import { CartService } from '../cart/cart.service.js';
 import { InventoryService } from '../../inventory/inventory.service.js';
 import { AuditService } from '../../audit/audit.service.js';
+import { DiscountsService } from '../../growth/discounts/discounts.service.js';
+import { AbandonedCartsService } from '../../growth/abandoned-carts/abandoned-carts.service.js';
 
 @Injectable()
 export class OrdersService {
@@ -12,6 +14,8 @@ export class OrdersService {
     private readonly cartService: CartService,
     private readonly inventoryService: InventoryService,
     private readonly auditService: AuditService,
+    private readonly discountsService: DiscountsService,
+    private readonly abandonedCartsService: AbandonedCartsService,
   ) {}
 
   findAll() {
@@ -74,6 +78,21 @@ export class OrdersService {
     const orderNumber = await this.generateOrderNumber();
 
     const order = await this.prisma.$transaction(async (tx) => {
+      const eventsToCreate: Prisma.OrderEventCreateWithoutOrderInput[] = [
+        { type: 'order.created', message: 'Order created from cart' },
+      ];
+
+      if (pricedCart.discountCode && pricedCart.discount.greaterThan(0)) {
+        eventsToCreate.push({
+          type: 'order.discount_applied',
+          message: `Discount '${pricedCart.discountCode}' applied: ₹${pricedCart.discount.toFixed(2)}`,
+          metadata: {
+            code: pricedCart.discountCode,
+            amount: pricedCart.discount.toString(),
+          } as Prisma.InputJsonValue,
+        });
+      }
+
       const created = await tx.order.create({
         data: {
           orderNumber,
@@ -82,10 +101,10 @@ export class OrdersService {
           paymentStatus: 'PENDING',
           shippingStatus: 'NOT_SHIPPED',
           subtotal: pricedCart.subtotal,
-          discount: 0,
+          discount: pricedCart.discount,
           tax: 0,
           shipping: 0,
-          total: pricedCart.subtotal,
+          total: pricedCart.total,
           items: {
             create: pricedCart.items.map((item) => {
               const variant = variantById.get(item.variantId)!;
@@ -113,13 +132,35 @@ export class OrdersService {
             }),
           },
           events: {
-            create: { type: 'order.created', message: 'Order created from cart' },
+            create: eventsToCreate,
           },
         },
         include: { items: true },
       });
 
+      if (pricedCart.discountCode && pricedCart.discount.greaterThan(0)) {
+        const discountRecord = await tx.discount.findUnique({
+          where: { code: pricedCart.discountCode },
+        });
+        if (discountRecord) {
+          await tx.discount.update({
+            where: { id: discountRecord.id },
+            data: { usageCount: { increment: 1 } },
+          });
+          await tx.discountRedemption.create({
+            data: {
+              discountId: discountRecord.id,
+              customerId,
+              orderId: created.id,
+              cartId,
+              amount: pricedCart.discount,
+            },
+          });
+        }
+      }
+
       await tx.cart.update({ where: { id: cartId }, data: { status: 'CONVERTED' } });
+      await this.abandonedCartsService.markConverted(cartId, tx);
 
       return created;
     });

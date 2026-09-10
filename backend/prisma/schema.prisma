@@ -111,6 +111,9 @@ model Customer {
   carts         Cart[]
   orders        Order[]
   designs       Design[]
+  segmentMemberships CustomerSegmentMember[]
+  discountRedemptions DiscountRedemption[]
+  cartRecoveries     AbandonedCartRecovery[]
   createdAt     DateTime           @default(now()) @map("created_at")
   updatedAt     DateTime           @updatedAt @map("updated_at")
   deletedAt     DateTime?          @map("deleted_at")
@@ -310,10 +313,12 @@ model Cart {
   id         String     @id @default(uuid())
   customerId String?    @map("customer_id")
   customer   Customer?  @relation(fields: [customerId], references: [id])
-  status     CartStatus @default(ACTIVE)
-  items      CartItem[]
-  createdAt  DateTime   @default(now()) @map("created_at")
-  updatedAt  DateTime   @updatedAt @map("updated_at")
+  status       CartStatus @default(ACTIVE)
+  discountCode String?    @map("discount_code")
+  items        CartItem[]
+  recovery     AbandonedCartRecovery?
+  createdAt    DateTime   @default(now()) @map("created_at")
+  updatedAt    DateTime   @updatedAt @map("updated_at")
 
   @@map("carts")
 }
@@ -366,6 +371,7 @@ model Order {
   shipments  Shipment[]
   returnRequests      ReturnRequest[]
   replacementRequests ReplacementRequest[]
+  discountRedemptions DiscountRedemption[]
 
   createdAt  DateTime @default(now()) @map("created_at")
   updatedAt  DateTime @updatedAt @map("updated_at")
@@ -1123,4 +1129,205 @@ model RtoCase {
   @@index([warehouseId])
   @@map("rto_cases")
 }
+
+// ─────────────────────────────────────────────────────────────────────────
+// GROWTH (Phase 5 — Discounts, Promotions, Campaigns, Segments, Abandoned Carts)
+// ─────────────────────────────────────────────────────────────────────────
+
+enum DiscountType {
+  PERCENTAGE
+  FIXED_AMOUNT
+}
+
+enum PromotionType {
+  AUTOMATIC_DISCOUNT
+  BUY_X_GET_Y
+  TIERED_DISCOUNT
+  FREE_SHIPPING
+}
+
+enum CampaignType {
+  SEASONAL
+  PRODUCT_LAUNCH
+  ABANDONED_CART
+  RETENTION
+  SPECIAL_PROMO
+}
+
+enum CampaignStatus {
+  DRAFT
+  SCHEDULED
+  ACTIVE
+  PAUSED
+  COMPLETED
+  CANCELLED
+}
+
+enum SegmentType {
+  MANUAL
+  DYNAMIC
+}
+
+enum AbandonedRecoveryStatus {
+  DETECTED
+  NOTIFICATION_SENT
+  RECOVERED
+  EXPIRED
+  CANCELLED
+}
+
+model CustomerSegment {
+  id          String                  @id @default(uuid())
+  name        String                  @unique
+  slug        String                  @unique
+  description String?
+  type        SegmentType             @default(DYNAMIC)
+  criteria    Json?
+  isActive    Boolean                 @default(true) @map("is_active")
+  members     CustomerSegmentMember[]
+  campaigns   Campaign[]
+  discounts   Discount[]
+  promotions  Promotion[]
+  createdAt   DateTime                @default(now()) @map("created_at")
+  updatedAt   DateTime                @updatedAt @map("updated_at")
+
+  @@map("customer_segments")
+}
+
+model CustomerSegmentMember {
+  segmentId  String          @map("segment_id")
+  customerId String          @map("customer_id")
+  joinedAt   DateTime        @default(now()) @map("joined_at")
+  segment    CustomerSegment @relation(fields: [segmentId], references: [id], onDelete: Cascade)
+  customer   Customer        @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  @@id([segmentId, customerId])
+  @@index([customerId])
+  @@map("customer_segment_members")
+}
+
+model Campaign {
+  id               String           @id @default(uuid())
+  name             String
+  code             String           @unique
+  description      String?
+  type             CampaignType     @default(SEASONAL)
+  status           CampaignStatus   @default(DRAFT)
+  startsAt         DateTime         @map("starts_at")
+  endsAt           DateTime?        @map("ends_at")
+  budget           Decimal?         @db.Decimal(12, 2)
+  revenueGenerated Decimal          @default(0) @map("revenue_generated") @db.Decimal(12, 2)
+  targetSegmentId  String?          @map("target_segment_id")
+  targetSegment    CustomerSegment? @relation(fields: [targetSegmentId], references: [id])
+  discounts        Discount[]
+  promotions       Promotion[]
+  createdAt        DateTime         @default(now()) @map("created_at")
+  updatedAt        DateTime         @updatedAt @map("updated_at")
+
+  @@index([status])
+  @@map("campaigns")
+}
+
+model Discount {
+  id                    String                  @id @default(uuid())
+  code                  String                  @unique
+  description           String?
+  discountType          DiscountType            @map("discount_type")
+  value                 Decimal                 @db.Decimal(12, 2)
+  maxDiscountAmount     Decimal?                @map("max_discount_amount") @db.Decimal(12, 2)
+  minOrderSubtotal      Decimal?                @map("min_order_subtotal") @db.Decimal(12, 2)
+  usageLimit            Int?                    @map("usage_limit")
+  usageCount            Int                     @default(0) @map("usage_count")
+  perCustomerLimit      Int?                    @map("per_customer_limit")
+  startsAt              DateTime?               @map("starts_at")
+  expiresAt             DateTime?               @map("expires_at")
+  isActive              Boolean                 @default(true) @map("is_active")
+  isExclusive           Boolean                 @default(false) @map("is_exclusive")
+  applicableCategoryIds String[]                @default([]) @map("applicable_category_ids")
+  applicableProductIds  String[]                @default([]) @map("applicable_product_ids")
+  customerSegmentId     String?                 @map("customer_segment_id")
+  customerSegment       CustomerSegment?        @relation(fields: [customerSegmentId], references: [id])
+  campaignId            String?                 @map("campaign_id")
+  campaign              Campaign?               @relation(fields: [campaignId], references: [id])
+  redemptions           DiscountRedemption[]
+  recoveriesOffered     AbandonedCartRecovery[]
+  createdAt             DateTime                @default(now()) @map("created_at")
+  updatedAt             DateTime                @updatedAt @map("updated_at")
+
+  @@index([code])
+  @@index([isActive])
+  @@map("discounts")
+}
+
+model DiscountRedemption {
+  id         String   @id @default(uuid())
+  discountId String   @map("discount_id")
+  customerId String   @map("customer_id")
+  orderId    String?  @map("order_id")
+  cartId     String?  @map("cart_id")
+  amount     Decimal  @db.Decimal(12, 2)
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  discount   Discount @relation(fields: [discountId], references: [id], onDelete: Cascade)
+  customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  order      Order?   @relation(fields: [orderId], references: [id])
+
+  @@index([discountId, customerId])
+  @@index([orderId])
+  @@map("discount_redemptions")
+}
+
+model Promotion {
+  id                    String           @id @default(uuid())
+  name                  String
+  slug                  String           @unique
+  description           String?
+  promotionType         PromotionType    @default(AUTOMATIC_DISCOUNT) @map("promotion_type")
+  discountType          DiscountType     @default(PERCENTAGE) @map("discount_type")
+  value                 Decimal          @db.Decimal(12, 2)
+  minOrderSubtotal      Decimal?         @map("min_order_subtotal") @db.Decimal(12, 2)
+  minQuantity           Int?             @map("min_quantity")
+  maxDiscountAmount     Decimal?         @map("max_discount_amount") @db.Decimal(12, 2)
+  priority              Int              @default(0)
+  isStackable           Boolean          @default(false) @map("is_stackable")
+  startsAt              DateTime         @map("starts_at")
+  endsAt                DateTime         @map("ends_at")
+  isActive              Boolean          @default(true) @map("is_active")
+  applicableCategoryIds String[]         @default([]) @map("applicable_category_ids")
+  applicableProductIds  String[]         @default([]) @map("applicable_product_ids")
+  customerSegmentId     String?          @map("customer_segment_id")
+  customerSegment       CustomerSegment? @relation(fields: [customerSegmentId], references: [id])
+  campaignId            String?          @map("campaign_id")
+  campaign              Campaign?        @relation(fields: [campaignId], references: [id])
+  rules                 Json?
+  createdAt             DateTime         @default(now()) @map("created_at")
+  updatedAt             DateTime         @updatedAt @map("updated_at")
+
+  @@index([isActive])
+  @@index([priority])
+  @@map("promotions")
+}
+
+model AbandonedCartRecovery {
+  id                     String                  @id @default(uuid())
+  cartId                 String                  @unique @map("cart_id")
+  cart                   Cart                    @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  customerId             String?                 @map("customer_id")
+  customer               Customer?               @relation(fields: [customerId], references: [id])
+  recoveryToken          String                  @unique @map("recovery_token")
+  status                 AbandonedRecoveryStatus @default(DETECTED)
+  reminderCount          Int                     @default(0) @map("reminder_count")
+  lastNotificationSentAt DateTime?               @map("last_notification_sent_at")
+  recoveredAt            DateTime?               @map("recovered_at")
+  offeredDiscountId      String?                 @map("offered_discount_id")
+  offeredDiscount        Discount?               @relation(fields: [offeredDiscountId], references: [id])
+  metadata               Json?
+  createdAt              DateTime                @default(now()) @map("created_at")
+  updatedAt              DateTime                @updatedAt @map("updated_at")
+
+  @@index([status])
+  @@index([recoveryToken])
+  @@map("abandoned_cart_recoveries")
+}
+
 
