@@ -717,6 +717,26 @@ enum ArtworkStatus {
 // PRODUCTION (scope §30–40, §87 Production, §106–109) — Phase 3
 // ─────────────────────────────────────────────────────────────────────────
 
+model Warehouse {
+  id             String   @id @default(uuid())
+  name           String
+  code           String   @unique
+  addressLine1   String   @map("address_line1")
+  addressLine2   String?  @map("address_line2")
+  city           String
+  state          String
+  postalCode     String   @map("postal_code")
+  country        String   @default("IN")
+  isActive       Boolean  @default(true) @map("is_active")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  machines       Machine[]
+  productionJobs ProductionJob[]
+
+  @@map("warehouses")
+}
+
 model Machine {
   id                 String        @id @default(uuid())
   name               String
@@ -724,7 +744,8 @@ model Machine {
   status             MachineStatus @default(AVAILABLE)
   capacity           Int? // units/hour, admin-defined
   supportedMaterials String[]      @map("supported_materials")
-  warehouseId        String?       @map("warehouse_id") // Phase 4 backfills a real FK once Warehouse exists
+  warehouseId        String?       @map("warehouse_id")
+  warehouse          Warehouse?    @relation(fields: [warehouseId], references: [id])
   maintenanceDate    DateTime?     @map("maintenance_date")
   stages             ProductionJobStage[]
   batches            ProductionBatch[]
@@ -747,7 +768,8 @@ model ProductionJob {
   id           String              @id @default(uuid())
   orderItemId  String              @unique @map("order_item_id")
   orderItem    OrderItem           @relation(fields: [orderItemId], references: [id])
-  warehouseId  String?             @map("warehouse_id") // Phase 4 backfills a real FK
+  warehouseId  String?             @map("warehouse_id")
+  warehouse    Warehouse?          @relation(fields: [warehouseId], references: [id])
   priority     Int                 @default(0)
   status       ProductionJobStatus @default(QUEUED)
   reworkCount  Int                 @default(0) @map("rework_count")

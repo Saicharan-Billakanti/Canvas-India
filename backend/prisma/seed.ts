@@ -3,10 +3,13 @@ import { PrismaPg } from '@prisma/adapter-pg';
 import * as argon2 from 'argon2';
 import 'dotenv/config';
 
-const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
+const adapter = new PrismaPg({
+  connectionString: process.env.DATABASE_URL,
+});
+
 const prisma = new PrismaClient({ adapter });
 
-// Permission catalog (scope §73) — extended as later phases add modules.
+// Permission catalog — extended as later phases add modules.
 const PERMISSIONS = [
   'users.view',
   'users.manage',
@@ -26,15 +29,19 @@ const PERMISSIONS = [
   'orders.refund',
   'inventory.view',
   'inventory.adjust',
+  'warehouses.view',
+  'warehouses.manage',
   'finance.view',
-  // Customization Engine (Phase 2, scope §21-29)
+
+  // Customization Engine (Phase 2)
   'assets.upload',
   'designs.view',
   'designs.edit',
   'artwork.view',
   'artwork.approve',
   'artwork.reject',
-  // Production Management (Phase 3, scope §30-40, §106-109)
+
+  // Production Management (Phase 3)
   'production.view',
   'production.assign',
   'production.complete',
@@ -48,10 +55,16 @@ const PERMISSIONS = [
 ];
 
 async function main() {
+  // Seed permissions.
   for (const key of PERMISSIONS) {
-    await prisma.permission.upsert({ where: { key }, update: {}, create: { key } });
+    await prisma.permission.upsert({
+      where: { key },
+      update: {},
+      create: { key },
+    });
   }
 
+  // Seed Super Admin role.
   const superAdminRole = await prisma.role.upsert({
     where: { name: 'Super Admin' },
     update: {},
@@ -64,14 +77,23 @@ async function main() {
 
   // Grant every known permission to Super Admin.
   const allPermissions = await prisma.permission.findMany();
-  await prisma.rolePermission.deleteMany({ where: { roleId: superAdminRole.id } });
+
+  await prisma.rolePermission.deleteMany({
+    where: { roleId: superAdminRole.id },
+  });
+
   await prisma.rolePermission.createMany({
-    data: allPermissions.map((p) => ({ roleId: superAdminRole.id, permissionId: p.id })),
+    data: allPermissions.map((p) => ({
+      roleId: superAdminRole.id,
+      permissionId: p.id,
+    })),
     skipDuplicates: true,
   });
 
+  // Seed Super Admin user.
   const seedEmail = process.env.SEED_ADMIN_EMAIL ?? 'admin@canvaschamp.in';
   const seedPassword = process.env.SEED_ADMIN_PASSWORD ?? 'ChangeMe123!';
+
   const passwordHash = await argon2.hash(seedPassword);
 
   await prisma.adminUser.upsert({
@@ -108,14 +130,54 @@ async function main() {
 
   for (const [value, priceAdjustment] of sizeValues) {
     await prisma.optionValue.upsert({
-      where: { optionGroupId_value: { optionGroupId: sizeGroup.id, value } },
+      where: {
+        optionGroupId_value: {
+          optionGroupId: sizeGroup.id,
+          value,
+        },
+      },
       update: {},
-      create: { optionGroupId: sizeGroup.id, value, priceAdjustment },
+      create: {
+        optionGroupId: sizeGroup.id,
+        value,
+        priceAdjustment,
+      },
     });
   }
 
+  // Seed warehouses for Phase 4.
+  await prisma.warehouse.upsert({
+    where: { code: 'BLR-01' },
+    update: {},
+    create: {
+      name: 'Bengaluru Production Warehouse',
+      code: 'BLR-01',
+      addressLine1: 'Industrial Area, Peenya',
+      city: 'Bengaluru',
+      state: 'Karnataka',
+      postalCode: '560058',
+      country: 'IN',
+    },
+  });
+
+  await prisma.warehouse.upsert({
+    where: { code: 'DEL-01' },
+    update: {},
+    create: {
+      name: 'Delhi Fulfilment Warehouse',
+      code: 'DEL-01',
+      addressLine1: 'Okhla Industrial Area',
+      city: 'New Delhi',
+      state: 'Delhi',
+      postalCode: '110020',
+      country: 'IN',
+    },
+  });
+
   // eslint-disable-next-line no-console
-  console.log(`Seed complete. Super admin login: ${seedEmail} / ${seedPassword}`);
+  console.log(
+    `Seed complete. Super admin login: ${seedEmail} / ${seedPassword}`,
+  );
 }
 
 main()
