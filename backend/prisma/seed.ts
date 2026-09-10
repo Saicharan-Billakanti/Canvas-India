@@ -31,6 +31,9 @@ const PERMISSIONS = [
   'inventory.adjust',
   'warehouses.view',
   'warehouses.manage',
+  'shipping.view',
+  'shipping.create',
+  'shipping.cancel',
   'finance.view',
 
   // Customization Engine (Phase 2)
