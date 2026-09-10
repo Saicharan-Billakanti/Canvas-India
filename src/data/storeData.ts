@@ -458,6 +458,912 @@ export const OCCASIONS: OccasionItem[] = [
   },
 ];
 
+export interface OccasionMenuItem {
+  name: string;
+  slug: string;
+}
+
+export const SPECIAL_OCCASIONS: OccasionMenuItem[] = [
+  { name: "Mother's Day", slug: 'mothers-day' },
+  { name: "Brother's Day", slug: 'brothers-day' },
+  { name: "Father's Day", slug: 'fathers-day' },
+  { name: 'Friendship Day', slug: 'friendship-day' },
+  { name: "Teacher's Day", slug: 'teachers-day' },
+  { name: "Children's Day", slug: 'childrens-day' },
+  { name: "Men's Day", slug: 'mens-day' },
+  { name: 'New Year', slug: 'new-year' },
+  { name: 'Republic Day', slug: 'republic-day' },
+  { name: "Valentine's Day", slug: 'valentines-day' },
+  { name: "Women's Day", slug: 'womens-day' },
+];
+
+export const FESTIVALS: OccasionMenuItem[] = [
+  { name: 'Rakshabandhan', slug: 'rakshabandhan' },
+  { name: 'Janmashtami', slug: 'janmashtami' },
+  { name: 'Ganesh Chaturthi', slug: 'ganesh-chaturthi' },
+  { name: 'Karwa Chauth', slug: 'karwa-chauth' },
+  { name: 'Halloween', slug: 'halloween' },
+  { name: 'Diwali', slug: 'diwali' },
+  { name: 'Bhai Dooj', slug: 'bhai-dooj' },
+  { name: 'Christmas', slug: 'christmas' },
+  { name: 'Lohri', slug: 'lohri' },
+  { name: 'Makar Sankranti', slug: 'makar-sankranti' },
+  { name: 'Pongal', slug: 'pongal' },
+  { name: 'Holi', slug: 'holi' },
+];
+
+export const ALL_GIFTS_PROMO = {
+  title: 'All Gifts & Celebrations',
+  tagline: 'Personalized photo keepsakes, crystal acrylic blocks & custom wall prints for every milestone.',
+  badge: 'Special Festive Offers',
+  image: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=600&auto=format&fit=crop&q=80',
+  buttonText: 'Shop All Gifts',
+  slug: 'gifts',
+};
+
+export interface MegaMenuItem {
+  name: string;
+  slug: string;
+  description?: string;
+  badge?: string;
+  actionType?: 'category' | 'quote' | 'customize';
+}
+
+export interface MegaMenuGroup {
+  title: string;
+  iconType: 'heart' | 'sparkles' | 'palette' | 'layers' | 'circleDot' | 'printer' | 'package' | 'building' | 'sliders';
+  items: MegaMenuItem[];
+}
+
+export interface MegaMenuPromo {
+  title: string;
+  tagline: string;
+  badge: string;
+  image: string;
+  buttonText: string;
+  slug: string;
+  actionType: 'category' | 'quote' | 'customize';
+}
+
+export interface MegaMenuConfig {
+  id: string;
+  name: string;
+  groups: MegaMenuGroup[];
+  promo: MegaMenuPromo;
+}
+
+export const MEGA_MENUS_DATA: Record<string, MegaMenuConfig> = {
+  'canvas-prints': {
+    id: 'canvas-prints',
+    name: 'Canvas',
+    groups: [
+      {
+        title: 'Shop Canvas',
+        iconType: 'palette',
+        items: [
+          { name: 'Photo Canvas', slug: 'canvas-prints', description: 'Stretched 380 GSM cotton on solid pine frame' },
+          { name: 'Collage Canvas', slug: 'canvas-prints', description: 'Multiple photos in balanced grid layout' },
+          { name: 'Family Canvas', slug: 'canvas-prints', description: 'Skin-tone color balancing with mirrored edge' },
+          { name: 'Couple Canvas', slug: 'canvas-prints', description: 'Romantic moments on museum-wrapped canvas' },
+          { name: 'Kids Canvas', slug: 'canvas-prints', description: 'Vivid nursery milestones and memory sets' },
+          { name: 'Wedding Canvas', slug: 'canvas-prints', description: 'Grand panoramic portraits with floater frame' },
+          { name: 'Quote Canvas', slug: 'canvas-prints', description: 'Inspirational typography on fine texture' },
+          { name: 'Personalized Canvas', slug: 'canvas-prints', description: 'Custom dimensions and gallery wrap depths' },
+        ],
+      },
+      {
+        title: 'By Size & Finishes',
+        iconType: 'sliders',
+        items: [
+          { name: 'Small (8x10 inch)', slug: 'canvas-prints', description: 'Compact desks and corridor gallery walls' },
+          { name: 'Medium (12x18 inch)', slug: 'canvas-prints', description: 'Most popular living room format' },
+          { name: 'Large (16x24 & 20x30)', slug: 'canvas-prints', description: 'Statement wall centerpiece' },
+          { name: 'Square (12x12 & 18x18)', slug: 'canvas-prints', description: 'Instagram photo grids & modular sets' },
+          { name: 'Panoramic (12x36 inch)', slug: 'canvas-prints', description: 'Wide landscape and headboard prints' },
+          { name: 'Floating Wood Frames', slug: 'canvas-prints', description: 'Solid teak, oak and black floater frames' },
+        ],
+      },
+      {
+        title: 'By Occasion & Popular',
+        iconType: 'sparkles',
+        items: [
+          { name: 'Wedding & Anniversary', slug: 'gifts', description: 'Timeless couple memories' },
+          { name: 'Birthday & Milestones', slug: 'gifts', description: 'Cherished memories for loved ones' },
+          { name: 'Housewarming Art', slug: 'gifts', description: 'Living room & entryway decor' },
+          { name: 'Festival Specials', slug: 'deals', description: 'Diwali & New Year festive canvas' },
+          { name: 'Best Sellers', slug: 'canvas-prints', description: 'Customer top rated canvas formats' },
+          { name: 'Deals & Clearance', slug: 'deals', description: 'Up to 50% OFF limited stock' },
+        ],
+      },
+    ],
+    promo: {
+      title: 'Turn Your Memories Into Wall Art',
+      tagline: 'Premium Cotton Canvas Prints stretched on kiln-dried pine wood with 12-color archival inks.',
+      badge: 'Starting at ₹499',
+      image: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=600&auto=format&fit=crop&q=80',
+      buttonText: 'Create Your Canvas',
+      slug: 'canvas-prints',
+      actionType: 'category',
+    },
+  },
+  canvas: {
+    id: 'canvas',
+    name: 'Canvas Prints',
+    groups: [
+      {
+        title: 'Shop Canvas',
+        iconType: 'palette',
+        items: [
+          { name: 'Photo Canvas', slug: 'canvas-prints', description: 'Stretched 380 GSM cotton on solid pine frame' },
+          { name: 'Collage Canvas', slug: 'canvas-prints', description: 'Multiple photos in balanced grid layout' },
+          { name: 'Family Canvas', slug: 'canvas-prints', description: 'Skin-tone color balancing with mirrored edge' },
+          { name: 'Couple Canvas', slug: 'canvas-prints', description: 'Romantic moments on museum-wrapped canvas' },
+          { name: 'Kids Canvas', slug: 'canvas-prints', description: 'Vivid nursery milestones and memory sets' },
+          { name: 'Wedding Canvas', slug: 'canvas-prints', description: 'Grand panoramic portraits with floater frame' },
+          { name: 'Quote Canvas', slug: 'canvas-prints', description: 'Inspirational typography on fine texture' },
+          { name: 'Personalized Canvas', slug: 'canvas-prints', description: 'Custom dimensions and gallery wrap depths' },
+        ],
+      },
+      {
+        title: 'By Size & Finishes',
+        iconType: 'sliders',
+        items: [
+          { name: 'Small (8x10 inch)', slug: 'canvas-prints', description: 'Compact desks and corridor gallery walls' },
+          { name: 'Medium (12x18 inch)', slug: 'canvas-prints', description: 'Most popular living room format' },
+          { name: 'Large (16x24 & 20x30)', slug: 'canvas-prints', description: 'Statement wall centerpiece' },
+          { name: 'Square (12x12 & 18x18)', slug: 'canvas-prints', description: 'Instagram photo grids & modular sets' },
+          { name: 'Panoramic (12x36 inch)', slug: 'canvas-prints', description: 'Wide landscape and headboard prints' },
+          { name: 'Floating Wood Frames', slug: 'canvas-prints', description: 'Solid teak, oak and black floater frames' },
+        ],
+      },
+    ],
+    promo: {
+      title: 'Turn Your Memories Into Wall Art',
+      tagline: 'Premium Cotton Canvas Prints stretched on kiln-dried pine wood with 12-color archival inks.',
+      badge: 'Starting at ₹499',
+      image: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=600&auto=format&fit=crop&q=80',
+      buttonText: 'Create Your Canvas',
+      slug: 'canvas-prints',
+      actionType: 'category',
+    },
+  },
+  'acrylic-prints': {
+    id: 'acrylic-prints',
+    name: 'Acrylic',
+    groups: [
+      {
+        title: 'Acrylic Categories',
+        iconType: 'layers',
+        items: [
+          { name: 'Acrylic Photo Prints', slug: 'acrylic-prints', description: 'High-gloss optical brilliance with sub-surface UV print' },
+          { name: 'Acrylic Wall Art', slug: 'acrylic-prints', description: 'Floating frameless glass wall art with metal studs' },
+          { name: 'Acrylic Collage', slug: 'acrylic-prints', description: 'Multi-photo grid behind 4mm optical cast acrylic' },
+          { name: 'LED Acrylic', slug: 'acrylic-prints', description: 'Backlit edge illuminated architectural displays' },
+          { name: 'Personalized Acrylic', slug: 'acrylic-prints', description: 'Custom text, anniversary dates and family names' },
+          { name: 'Couple Acrylic', slug: 'acrylic-prints', description: 'High-definition pre-wedding & vacation moments' },
+          { name: 'Wedding Acrylic', slug: 'acrylic-prints', description: 'Luxurious gloss portraits with diamond-milled edges' },
+        ],
+      },
+      {
+        title: 'Features & Specs',
+        iconType: 'sliders',
+        items: [
+          { name: 'Tabletop Acrylic Blocks', slug: 'acrylic-prints', description: '20mm freestanding diamond-milled crystal block' },
+          { name: '92% Optical Transparency', slug: 'acrylic-prints', description: 'Ultra-clear cast monomer crystal grade' },
+          { name: 'Diamond Edge Polishing', slug: 'acrylic-prints', description: 'Precision CNC laser diamond-cut edges' },
+          { name: 'Stainless Steel Standoffs', slug: 'acrylic-prints', description: 'Floating mounting hardware included' },
+          { name: '12x18 to 24x36 inch', slug: 'acrylic-prints', description: 'Versatile formats with 2-3 day dispatch' },
+        ],
+      },
+    ],
+    promo: {
+      title: 'Premium Acrylic Memories',
+      tagline: 'Ultra-glossy crystal clarity with diamond-milled edges and floating architectural standoffs.',
+      badge: 'Starting from ₹399',
+      image: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=600&auto=format&fit=crop&q=80',
+      buttonText: 'Explore Acrylic',
+      slug: 'acrylic-prints',
+      actionType: 'category',
+    },
+  },
+  acrylic: {
+    id: 'acrylic',
+    name: 'Acrylic Prints',
+    groups: [
+      {
+        title: 'Acrylic Categories',
+        iconType: 'layers',
+        items: [
+          { name: 'Acrylic Photo Prints', slug: 'acrylic-prints', description: 'High-gloss optical brilliance with sub-surface UV print' },
+          { name: 'Acrylic Wall Art', slug: 'acrylic-prints', description: 'Floating frameless glass wall art with metal studs' },
+          { name: 'Tabletop Acrylic Blocks', slug: 'acrylic-prints', description: '20mm freestanding diamond-milled crystal block' },
+          { name: 'Personalized Acrylic', slug: 'acrylic-prints', description: 'Custom text, anniversary dates and family names' },
+          { name: 'Couple & Wedding Acrylic', slug: 'acrylic-prints', description: 'Luxurious gloss portraits with diamond-milled edges' },
+        ],
+      },
+      {
+        title: 'Features & Specs',
+        iconType: 'sliders',
+        items: [
+          { name: '92% Optical Transparency', slug: 'acrylic-prints', description: 'Ultra-clear cast monomer crystal grade' },
+          { name: 'Diamond Milled Polishing', slug: 'acrylic-prints', description: 'Precision CNC laser diamond-cut edges' },
+          { name: 'Stainless Steel Standoffs', slug: 'acrylic-prints', description: 'Floating mounting hardware included' },
+          { name: 'Starting from ₹399', slug: 'acrylic-prints', description: 'Tabletop blocks & wall prints' },
+        ],
+      },
+    ],
+    promo: {
+      title: 'Premium Acrylic Memories',
+      tagline: 'Ultra-glossy crystal clarity with diamond-milled edges and floating metal standoffs.',
+      badge: 'Starting from ₹399',
+      image: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=600&auto=format&fit=crop&q=80',
+      buttonText: 'Explore Acrylic',
+      slug: 'acrylic-prints',
+      actionType: 'category',
+    },
+  },
+  'cork-prints': {
+    id: 'cork-prints',
+    name: 'Cork',
+    groups: [
+      {
+        title: 'Cork Products',
+        iconType: 'circleDot',
+        items: [
+          { name: 'Cork Photo Prints', slug: 'cork-prints', description: 'Direct UV high-definition print on natural cork' },
+          { name: 'Cork Collage', slug: 'cork-prints', description: 'Multi-photo travel memory boards with pins' },
+          { name: 'Cork Maps', slug: 'cork-prints', description: 'India & World travel pin maps with pushpins' },
+          { name: 'Cork Boards', slug: 'cork-prints', description: 'High-density natural bulletin and vision boards' },
+          { name: 'Personalized Cork', slug: 'cork-prints', description: 'Custom family names, quotes and calendars' },
+          { name: 'Office Cork Products', slug: 'cork-prints', description: 'Anodized aluminum edge boards for workrooms' },
+        ],
+      },
+      {
+        title: 'Qualities & Sets',
+        iconType: 'sliders',
+        items: [
+          { name: 'Hexagon Acoustic Tiles', slug: 'cork-prints', description: 'Modular sound dampening set of 6 tiles' },
+          { name: 'Self-Healing Micro-Grain', slug: 'cork-prints', description: 'Pins leave no visible holes or marks' },
+          { name: '100% Regenerative Bark', slug: 'cork-prints', description: 'Harvested sustainably without harming trees' },
+          { name: 'Pushpins Included', slug: 'cork-prints', description: 'Ready to mount with matching hardware' },
+          { name: 'Starting from ₹499', slug: 'cork-prints', description: 'Eco-friendly natural decor' },
+        ],
+      },
+    ],
+    promo: {
+      title: 'Natural Cork Creations',
+      tagline: 'Harvested from regenerative bark for thermal warmth, acoustic dampening & pin memories.',
+      badge: 'Starting from ₹499',
+      image: 'https://images.unsplash.com/photo-1586075010923-2dd4570fb338?w=600&auto=format&fit=crop&q=80',
+      buttonText: 'Explore Cork',
+      slug: 'cork-prints',
+      actionType: 'category',
+    },
+  },
+  cork: {
+    id: 'cork',
+    name: 'Cork Prints',
+    groups: [
+      {
+        title: 'Cork Products',
+        iconType: 'circleDot',
+        items: [
+          { name: 'Cork Photo Prints', slug: 'cork-prints', description: 'Direct UV high-definition print on natural cork' },
+          { name: 'Cork Maps', slug: 'cork-prints', description: 'India & World travel pin maps with pushpins' },
+          { name: 'Cork Boards', slug: 'cork-prints', description: 'High-density natural bulletin and vision boards' },
+          { name: 'Hexagon Acoustic Tiles', slug: 'cork-prints', description: 'Modular sound dampening set of 6 tiles' },
+        ],
+      },
+      {
+        title: 'Qualities & Specs',
+        iconType: 'sliders',
+        items: [
+          { name: 'Self-Healing Micro-Grain', slug: 'cork-prints', description: 'Pins leave no visible marks' },
+          { name: '100% Sustainable Bark', slug: 'cork-prints', description: 'Harvested without harming trees' },
+          { name: 'Starting from ₹499', slug: 'cork-prints', description: 'Eco-friendly Indian home decor' },
+        ],
+      },
+    ],
+    promo: {
+      title: 'Natural Cork Creations',
+      tagline: 'Harvested from regenerative bark for thermal warmth and acoustic pin memories.',
+      badge: 'Eco-Friendly',
+      image: 'https://images.unsplash.com/photo-1586075010923-2dd4570fb338?w=600&auto=format&fit=crop&q=80',
+      buttonText: 'Explore Cork',
+      slug: 'cork-prints',
+      actionType: 'category',
+    },
+  },
+  'custom-prints': {
+    id: 'custom-prints',
+    name: 'Custom Prints',
+    groups: [
+      {
+        title: 'Custom Print Types',
+        iconType: 'printer',
+        items: [
+          { name: 'Photo Printing', slug: 'custom-prints', description: 'Direct high-res upload with instant preview', actionType: 'customize' },
+          { name: 'Posters', slug: 'custom-prints', description: '300 GSM heavyweight matte and glossy paper', actionType: 'customize' },
+          { name: 'Frames', slug: 'custom-prints', description: 'Personalized framed prints with shadow float gap', actionType: 'customize' },
+          { name: 'Collages', slug: 'custom-prints', description: 'Sequential triptych and multi-photo templates', actionType: 'customize' },
+          { name: 'Wall Art', slug: 'custom-prints', description: 'Curated artistic prints and Indian motifs', actionType: 'customize' },
+          { name: 'Personalized Gifts', slug: 'custom-prints', description: 'Customized keepsakes for loved ones', actionType: 'customize' },
+          { name: 'Photo Books', slug: 'custom-prints', description: 'Hardcover memory albums for family & trips', actionType: 'customize' },
+          { name: 'Custom Merchandise', slug: 'custom-prints', description: 'Branded desk accessories & gifting sets', actionType: 'customize' },
+        ],
+      },
+      {
+        title: 'Studio Features',
+        iconType: 'sliders',
+        items: [
+          { name: 'Upload Any Photo', slug: 'custom-prints', description: 'Mobile camera or camera roll direct upload', actionType: 'customize' },
+          { name: 'Choose Size & Finish', slug: 'custom-prints', description: 'Compact 8x10 to statement 24x36 inch', actionType: 'customize' },
+          { name: 'Instant 3D Preview', slug: 'custom-prints', description: 'Live preview before placing order', actionType: 'customize' },
+          { name: 'Fast Pan-India Delivery', slug: 'custom-prints', description: 'Doorstep dispatch in 2-4 business days', actionType: 'customize' },
+        ],
+      },
+    ],
+    promo: {
+      title: 'Create Something That’s Yours',
+      tagline: 'Upload your photo, choose size, layout and finish, and preview live in seconds.',
+      badge: 'Easy Online Customizer',
+      image: 'https://images.unsplash.com/photo-1526738549149-8e07eca6c147?w=600&auto=format&fit=crop&q=80',
+      buttonText: 'Launch Customizer',
+      slug: 'custom-prints',
+      actionType: 'customize',
+    },
+  },
+  'photo-frames': {
+    id: 'photo-frames',
+    name: 'Photo Frames',
+    groups: [
+      {
+        title: 'Frame Styles',
+        iconType: 'printer',
+        items: [
+          { name: 'Tabletop Frames', slug: 'photo-frames', description: 'Solid wood freestanding frames for desks and consoles' },
+          { name: 'Wall Photo Frames', slug: 'photo-frames', description: 'Ready-to-hang gallery wall frames with mounts' },
+          { name: 'Floating Wood Frames', slug: 'photo-frames', description: '6mm elegant shadow float gap for canvas' },
+          { name: 'Collage Frames', slug: 'photo-frames', description: 'Multi-photo mats for family memory sets' },
+          { name: 'Certificate Frames', slug: 'photo-frames', description: 'A4 & A3 awards, degrees and milestone plaques' },
+          { name: 'Gallery Wall Sets', slug: 'photo-frames', description: 'Coordinated set of 3 to 6 matching frames' },
+        ],
+      },
+      {
+        title: 'Materials & Finishes',
+        iconType: 'sliders',
+        items: [
+          { name: 'Solid Teak & Ash Wood', slug: 'photo-frames', description: 'Natural wood grain with smooth satin coat' },
+          { name: 'Classic Matte Black', slug: 'photo-frames', description: 'Sleek contemporary look for any interior' },
+          { name: 'Shatterproof Acrylic Glass', slug: 'photo-frames', description: 'Crystal clarity with safe transit packaging' },
+          { name: 'Starting at ₹399', slug: 'photo-frames', description: 'High value framing direct from factory' },
+        ],
+      },
+    ],
+    promo: {
+      title: 'Solid Wood Photo Frames',
+      tagline: 'Hand-finished solid wood floater and gallery frames with shatterproof acrylic glass.',
+      badge: 'Starting at ₹399',
+      image: 'https://images.unsplash.com/photo-1544816155-12df9643f363?w=600&auto=format&fit=crop&q=80',
+      buttonText: 'Shop Frames',
+      slug: 'photo-frames',
+      actionType: 'category',
+    },
+  },
+  'wall-decor': {
+    id: 'wall-decor',
+    name: 'Wall Decor',
+    groups: [
+      {
+        title: 'Wall Art Styles',
+        iconType: 'sparkles',
+        items: [
+          { name: 'Canvas Wall Art', slug: 'wall-decor', description: 'Single & multi-panel stretched cotton artworks' },
+          { name: 'Acrylic Wall Panels', slug: 'wall-decor', description: 'Frameless ultra-glossy glass statement prints' },
+          { name: 'Framed Gallery Sets', slug: 'wall-decor', description: 'Balanced 3-piece sets for Indian living rooms' },
+          { name: 'Triptych 3-Piece Sets', slug: 'wall-decor', description: 'Panoramic landscape split across 3 panels' },
+          { name: 'Indian Heritage Art', slug: 'wall-decor', description: 'Warli, Madhubani, Pichwai & ethnic fusion' },
+          { name: 'Modern Minimalist Art', slug: 'wall-decor', description: 'Abstract line art & botanical photography' },
+        ],
+      },
+      {
+        title: 'Curated Spaces',
+        iconType: 'building',
+        items: [
+          { name: 'Living Room Walls', slug: 'wall-decor', description: 'Sofa backdrops and dining space centerpieces' },
+          { name: 'Master Bedrooms', slug: 'wall-decor', description: 'Calming scenery and romantic couple sets' },
+          { name: 'Pooja Room Prints', slug: 'wall-decor', description: 'Spiritual motifs with gold leaf textures' },
+          { name: 'Office Workspaces', slug: 'wall-decor', description: 'Motivational typography and vision art' },
+          { name: 'Starting at ₹599', slug: 'wall-decor', description: 'Ready-to-hang with pre-installed hooks' },
+        ],
+      },
+    ],
+    promo: {
+      title: 'Make Your Walls Personal',
+      tagline: 'Curated modern and Indian heritage wall art sets engineered to transform bare walls.',
+      badge: 'Starting at ₹599',
+      image: 'https://images.unsplash.com/photo-1582561424760-0321d75e81fa?w=600&auto=format&fit=crop&q=80',
+      buttonText: 'Explore Wall Art',
+      slug: 'wall-decor',
+      actionType: 'category',
+    },
+  },
+  gifts: {
+    id: 'gifts',
+    name: 'Gifts & Occasions',
+    groups: [
+      {
+        title: 'Occasions',
+        iconType: 'heart',
+        items: [
+          { name: 'Birthday', slug: 'gifts', description: 'Photo collages, desk blocks & memory frames' },
+          { name: 'Anniversary', slug: 'gifts', description: 'Romantic couple portraits & quote canvas' },
+          { name: 'Wedding', slug: 'gifts', description: 'Grand canvas portraits & wedding vow sets' },
+          { name: "Valentine's Day", slug: 'gifts', description: 'Cherished memories for your partner' },
+          { name: "Mother's Day", slug: 'gifts', description: 'Mother-child milestone portraits' },
+          { name: "Father's Day", slug: 'gifts', description: 'Executive desk blocks & family frames' },
+          { name: 'Friendship Day', slug: 'gifts', description: 'Collage frames & polaroid prints' },
+          { name: 'Housewarming', slug: 'gifts', description: 'Living room wall art & entryway boards' },
+          { name: 'Baby Milestones', slug: 'gifts', description: 'Nursery wall sets & baby footprint frames' },
+        ],
+      },
+      {
+        title: 'Festivals & Corporate',
+        iconType: 'sparkles',
+        items: [
+          { name: 'Raksha Bandhan', slug: 'gifts', description: 'Sibling photo prints & tabletop keepsakes' },
+          { name: 'Diwali Specials', slug: 'gifts', description: 'Festive pooja prints & family gift packs' },
+          { name: 'Christmas & New Year', slug: 'gifts', description: 'Year-end memories and holiday gifts' },
+          { name: 'Corporate Gifts', slug: 'corporate', description: 'Employee welcome kits & milestone awards' },
+          { name: 'All Gifts Store', slug: 'gifts', description: 'Browse all personalized gifting products' },
+        ],
+      },
+    ],
+    promo: {
+      title: 'All Gifts & Celebrations',
+      tagline: 'Personalized photo keepsakes, crystal acrylic blocks & custom wall prints for every Indian milestone.',
+      badge: 'Special Festive Offers',
+      image: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=600&auto=format&fit=crop&q=80',
+      buttonText: 'Shop All Gifts',
+      slug: 'gifts',
+      actionType: 'category',
+    },
+  },
+  corporate: {
+    id: 'corporate',
+    name: 'Corporate Orders',
+    groups: [
+      {
+        title: 'Corporate Solutions',
+        iconType: 'building',
+        items: [
+          { name: 'Office Reception & Logos', slug: 'corporate', description: 'Architectural acrylic lettering & brand walls', actionType: 'quote' },
+          { name: 'Employee Welcome Kits', slug: 'corporate', description: 'Milestone desk blocks & onboard photo frames', actionType: 'quote' },
+          { name: 'Client Appreciation Gifts', slug: 'corporate', description: 'Bespoke custom packaged executive gifts', actionType: 'quote' },
+          { name: 'Conference Room Displays', slug: 'corporate', description: 'Acoustic cork walls and company timeline canvas', actionType: 'quote' },
+          { name: 'Retail & Hospitality Signage', slug: 'corporate', description: 'Durable wipe-clean displays for hotels & cafes', actionType: 'quote' },
+        ],
+      },
+      {
+        title: 'Enterprise Services',
+        iconType: 'sliders',
+        items: [
+          { name: '100% GST Tax Invoicing', slug: 'corporate', description: 'Seamless B2B input tax credit on all orders', actionType: 'quote' },
+          { name: 'Exact Pantone Matching', slug: 'corporate', description: 'Precise enterprise brand color calibration', actionType: 'quote' },
+          { name: 'Dedicated Account Lead', slug: 'corporate', description: 'Direct phone & WhatsApp desk: +91 90765 43510', actionType: 'quote' },
+          { name: 'Pan-India Multi-Ship', slug: 'corporate', description: 'Direct split dispatch to 500+ pin codes', actionType: 'quote' },
+        ],
+      },
+    ],
+    promo: {
+      title: 'Corporate Gifting Solutions',
+      tagline: 'Transform workplace ambience and celebrate client milestones with premium custom art displays.',
+      badge: 'Enterprise Ready',
+      image: 'https://images.unsplash.com/photo-1497215728101-856f4ea42174?w=600&auto=format&fit=crop&q=80',
+      buttonText: 'Get a Corporate Quote',
+      slug: 'corporate',
+      actionType: 'quote',
+    },
+  },
+  'corporate-orders': {
+    id: 'corporate-orders',
+    name: 'Corporate',
+    groups: [
+      {
+        title: 'Commercial Solutions',
+        iconType: 'building',
+        items: [
+          { name: 'Office Reception & Logos', slug: 'corporate', description: 'Architectural acrylic lettering & brand walls', actionType: 'quote' },
+          { name: 'Employee Welcome Gifts', slug: 'corporate', description: 'Milestone desk blocks & onboard photo frames', actionType: 'quote' },
+          { name: 'Client Appreciation Gifts', slug: 'corporate', description: 'Bespoke custom packaged executive gifts', actionType: 'quote' },
+          { name: 'Conference Room Visuals', slug: 'corporate', description: 'Acoustic cork walls and company timeline canvas', actionType: 'quote' },
+        ],
+      },
+      {
+        title: 'Enterprise Services',
+        iconType: 'sliders',
+        items: [
+          { name: '100% GST Tax Invoicing', slug: 'corporate', description: 'B2B input tax credit supported', actionType: 'quote' },
+          { name: 'Dedicated Desk: +91 90765 43510', slug: 'corporate', description: 'Corporate team support', actionType: 'quote' },
+        ],
+      },
+    ],
+    promo: {
+      title: 'Corporate Gifting Solutions',
+      tagline: 'Transform workplace ambience and celebrate client milestones with premium custom art displays.',
+      badge: 'Enterprise Ready',
+      image: 'https://images.unsplash.com/photo-1497215728101-856f4ea42174?w=600&auto=format&fit=crop&q=80',
+      buttonText: 'Get a Corporate Quote',
+      slug: 'corporate',
+      actionType: 'quote',
+    },
+  },
+  'bulk-orders': {
+    id: 'bulk-orders',
+    name: 'Bulk Orders',
+    groups: [
+      {
+        title: 'Bulk Order Solutions',
+        iconType: 'package',
+        items: [
+          { name: 'Wholesale Canvas Prints', slug: 'bulk-orders', description: 'Wholesale tiered pricing on gallery wrapped canvas', actionType: 'quote' },
+          { name: 'Volume Acrylic Blocks', slug: 'bulk-orders', description: 'Volume rates for tabletop crystal desk awards', actionType: 'quote' },
+          { name: 'Bulk Cork Boards', slug: 'bulk-orders', description: 'Quantity school, office and studio supply', actionType: 'quote' },
+          { name: 'Wedding & Event Favors', slug: 'bulk-orders', description: 'Custom printed personalized guest keepsakes', actionType: 'quote' },
+          { name: 'Custom Wholesale Printing', slug: 'bulk-orders', description: 'Turnkey production for 20 to 1,000+ units', actionType: 'quote' },
+        ],
+      },
+      {
+        title: 'Volume Advantages',
+        iconType: 'sliders',
+        items: [
+          { name: 'Tiered Wholesale Rates', slug: 'bulk-orders', description: 'Save up to 40% on orders above 20 units', actionType: 'quote' },
+          { name: 'Free Pre-Production Proofs', slug: 'bulk-orders', description: 'Color-calibrated digital proof before production', actionType: 'quote' },
+          { name: 'Multi-Location Dispatch', slug: 'bulk-orders', description: 'Split shipping to branches across India', actionType: 'quote' },
+          { name: '100% GST Compliant', slug: 'bulk-orders', description: 'Official tax invoices with B2B input credit', actionType: 'quote' },
+        ],
+      },
+    ],
+    promo: {
+      title: 'Order in Quantity',
+      tagline: 'Special tiered pricing for volume orders above 10 units. Fast digital proofing & pan-India dispatch.',
+      badge: 'Volume Discounts',
+      image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&auto=format&fit=crop&q=80',
+      buttonText: 'Request Bulk Quote',
+      slug: 'bulk-orders',
+      actionType: 'quote',
+    },
+  },
+  'bulk-order': {
+    id: 'bulk-order',
+    name: 'Bulk Order',
+    groups: [
+      {
+        title: 'Bulk Order Solutions',
+        iconType: 'package',
+        items: [
+          { name: 'Wholesale Canvas Prints', slug: 'bulk-order', description: 'Wholesale tiered pricing on gallery wrapped canvas', actionType: 'quote' },
+          { name: 'Volume Acrylic Blocks', slug: 'bulk-order', description: 'Volume rates for tabletop crystal desk awards', actionType: 'quote' },
+          { name: 'Bulk Cork Boards', slug: 'bulk-order', description: 'Quantity school, office and studio supply', actionType: 'quote' },
+          { name: 'Wedding & Event Favors', slug: 'bulk-order', description: 'Custom printed personalized guest keepsakes', actionType: 'quote' },
+          { name: 'Custom Wholesale Printing', slug: 'bulk-order', description: 'Turnkey production for 20 to 1,000+ units', actionType: 'quote' },
+        ],
+      },
+      {
+        title: 'Volume Advantages',
+        iconType: 'sliders',
+        items: [
+          { name: 'Tiered Wholesale Rates', slug: 'bulk-order', description: 'Save up to 40% on orders above 20 units', actionType: 'quote' },
+          { name: 'Free Pre-Production Proofs', slug: 'bulk-order', description: 'Color-calibrated digital proof before production', actionType: 'quote' },
+          { name: 'Multi-Location Dispatch', slug: 'bulk-order', description: 'Split shipping to branches across India', actionType: 'quote' },
+          { name: '100% GST Compliant', slug: 'bulk-order', description: 'Official tax invoices with B2B input credit', actionType: 'quote' },
+        ],
+      },
+    ],
+    promo: {
+      title: 'Order in Quantity',
+      tagline: 'Special tiered pricing for volume orders above 10 units. Fast digital proofing & pan-India dispatch.',
+      badge: 'Volume Discounts',
+      image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&auto=format&fit=crop&q=80',
+      buttonText: 'Request Bulk Quote',
+      slug: 'bulk-order',
+      actionType: 'quote',
+    },
+  },
+  deals: {
+    id: 'deals',
+    name: 'Deals',
+    groups: [
+      {
+        title: 'Top Deals',
+        iconType: 'sparkles',
+        items: [
+          { name: "Today's Best Deals", slug: 'deals', description: 'Limited-time discounts up to 50% OFF' },
+          { name: 'Personalized Canvas from ₹499', slug: 'deals', description: 'Save 37% on popular 12x18 gallery wraps' },
+          { name: 'Acrylic Blocks from ₹399', slug: 'deals', description: 'Freestanding 20mm crystal desk blocks' },
+          { name: 'Cork Boards from ₹499', slug: 'deals', description: 'Natural self-healing pin boards' },
+          { name: 'Combo Sets & Packs', slug: 'deals', description: 'Gallery wall bundles with extra 15% OFF' },
+        ],
+      },
+      {
+        title: 'Budget Shopping',
+        iconType: 'sliders',
+        items: [
+          { name: 'Under ₹499 Store', slug: 'deals', description: 'Pocket-friendly personalized gifts' },
+          { name: '₹499 – ₹999 Popular Picks', slug: 'deals', description: 'Best value custom products' },
+          { name: '₹999 – ₹1,999 Premium Range', slug: 'deals', description: 'Grand format canvas and acrylic float' },
+          { name: 'Free Shipping Above ₹999', slug: 'deals', description: 'Zero delivery fee across all Indian pin codes' },
+        ],
+      },
+    ],
+    promo: {
+      title: "Today's Best Deals",
+      tagline: 'Limited-time offers on personalized products with fast dispatch across India.',
+      badge: 'Up to 50% OFF',
+      image: 'https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?w=600&auto=format&fit=crop&q=80',
+      buttonText: 'Shop All Deals',
+      slug: 'deals',
+      actionType: 'category',
+    },
+  },
+};
+
+export const SEARCH_SUGGESTIONS = [
+  'canvas prints',
+  'acrylic photo frames',
+  'birthday gifts',
+  'couple gifts',
+  'wedding gifts',
+  'photo collage',
+  'wall art',
+  'corporate gifts',
+  'Diwali gifts',
+];
+
+export interface CircularCategory {
+  id: string;
+  name: string;
+  slug: string;
+  image: string;
+  startingPrice: number;
+}
+
+export interface PrimaryCategoryItem {
+  id: string;
+  name: string;
+  slug: string;
+  iconName: 'Palette' | 'Layers' | 'CircleDot' | 'Printer' | 'Gift' | 'Package' | 'Building2';
+  startingPrice: number;
+  image: string;
+  description: string;
+}
+
+export const PRIMARY_CATEGORIES: PrimaryCategoryItem[] = [
+  {
+    id: 'cat-canvas',
+    name: 'Canvas',
+    slug: 'canvas-prints',
+    iconName: 'Palette',
+    startingPrice: 499,
+    image: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=400&auto=format&fit=crop&q=80',
+    description: 'Museum-grade 380 GSM cotton canvas prints',
+  },
+  {
+    id: 'cat-acrylic',
+    name: 'Acrylic',
+    slug: 'acrylic-prints',
+    iconName: 'Layers',
+    startingPrice: 399,
+    image: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=400&auto=format&fit=crop&q=80',
+    description: 'High-gloss 5mm crystal clear acrylic glass prints',
+  },
+  {
+    id: 'cat-cork',
+    name: 'Cork',
+    slug: 'cork-prints',
+    iconName: 'CircleDot',
+    startingPrice: 449,
+    image: 'https://images.unsplash.com/photo-1586075010923-2dd4570fb338?w=400&auto=format&fit=crop&q=80',
+    description: 'Natural 8mm eco-friendly cork pinboards and prints',
+  },
+  {
+    id: 'cat-custom',
+    name: 'Custom Prints',
+    slug: 'custom-prints',
+    iconName: 'Printer',
+    startingPrice: 299,
+    image: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400&auto=format&fit=crop&q=80',
+    description: 'Upload your own photo or custom dimensions',
+  },
+  {
+    id: 'cat-gifts',
+    name: 'Gifts & Occasions',
+    slug: 'gifts',
+    iconName: 'Gift',
+    startingPrice: 499,
+    image: 'https://images.unsplash.com/photo-1513201099705-a9746e1e201f?w=400&auto=format&fit=crop&q=80',
+    description: 'Personalized gifts for birthdays, weddings, anniversaries and festivals',
+  },
+  {
+    id: 'cat-bulk',
+    name: 'Bulk Order',
+    slug: 'bulk-order',
+    iconName: 'Package',
+    startingPrice: 249,
+    image: 'https://images.unsplash.com/photo-1582555172866-f73bb12a2ab3?w=400&auto=format&fit=crop&q=80',
+    description: 'Volume discounts for events, schools, artists and resellers',
+  },
+  {
+    id: 'cat-corporate',
+    name: 'Corporate Orders',
+    slug: 'corporate',
+    iconName: 'Building2',
+    startingPrice: 499,
+    image: 'https://images.unsplash.com/photo-1497215728101-856f4ea42174?w=400&auto=format&fit=crop&q=80',
+    description: 'B2B office art, employee welcome kits and GST invoicing',
+  },
+];
+
+export const CIRCULAR_CATEGORIES: CircularCategory[] = PRIMARY_CATEGORIES.map((cat) => ({
+  id: cat.id,
+  name: cat.name,
+  slug: cat.slug,
+  image: cat.image,
+  startingPrice: cat.startingPrice,
+}));
+
+export interface OccasionCardItem {
+  id: string;
+  name: string;
+  emoji: string;
+  slug: string;
+  image: string;
+  tagline: string;
+  offerText: string;
+}
+
+export const OCCASION_CARDS: OccasionCardItem[] = [
+  {
+    id: 'birthday',
+    name: 'Birthday',
+    emoji: '🎂',
+    slug: 'gifts',
+    image: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=500&auto=format&fit=crop&q=80',
+    tagline: 'Custom photo collages & acrylic desk blocks',
+    offerText: 'Up to 30% OFF',
+  },
+  {
+    id: 'anniversary',
+    name: 'Anniversary',
+    emoji: '💍',
+    slug: 'gifts',
+    image: 'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=500&auto=format&fit=crop&q=80',
+    tagline: 'Romantic timeline frames and quote canvas',
+    offerText: 'Flat 25% OFF',
+  },
+  {
+    id: 'valentine',
+    name: "Valentine's Day",
+    emoji: '❤️',
+    slug: 'gifts',
+    image: 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=500&auto=format&fit=crop&q=80',
+    tagline: 'Cherished couple prints & crystal hearts',
+    offerText: 'From ₹399',
+  },
+  {
+    id: 'mothers-day',
+    name: "Mother's Day",
+    emoji: '👩',
+    slug: 'gifts',
+    image: 'https://images.unsplash.com/photo-1544816155-12df9643f363?w=500&auto=format&fit=crop&q=80',
+    tagline: 'Heartfelt family portraits & mother-child memories',
+    offerText: 'Special Packs',
+  },
+  {
+    id: 'fathers-day',
+    name: "Father's Day",
+    emoji: '👨',
+    slug: 'gifts',
+    image: 'https://images.unsplash.com/photo-1582561424760-0321d75e81fa?w=500&auto=format&fit=crop&q=80',
+    tagline: 'Desk photo blocks & engraved cork boards',
+    offerText: 'Up to 20% OFF',
+  },
+  {
+    id: 'wedding',
+    name: 'Wedding',
+    emoji: '💒',
+    slug: 'gifts',
+    image: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=500&auto=format&fit=crop&q=80',
+    tagline: 'Grand canvas portraits & wedding vow sets',
+    offerText: 'Couple Packs',
+  },
+  {
+    id: 'housewarming',
+    name: 'Housewarming',
+    emoji: '🏠',
+    slug: 'gifts',
+    image: 'https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?w=500&auto=format&fit=crop&q=80',
+    tagline: 'Living room wall art & entryway boards',
+    offerText: 'From ₹799',
+  },
+  {
+    id: 'personalized',
+    name: 'Personalized Gifts',
+    emoji: '🎁',
+    slug: 'custom-prints',
+    image: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=500&auto=format&fit=crop&q=80',
+    tagline: 'Custom names, special dates and photos',
+    offerText: 'Bestseller',
+  },
+  {
+    id: 'diwali',
+    name: 'Diwali',
+    emoji: '🪔',
+    slug: 'gifts',
+    image: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=500&auto=format&fit=crop&q=80',
+    tagline: 'Festive pooja wall art & family gifting packs',
+    offerText: 'Diwali Specials',
+  },
+  {
+    id: 'christmas',
+    name: 'Christmas',
+    emoji: '🎄',
+    slug: 'gifts',
+    image: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=500&auto=format&fit=crop&q=80',
+    tagline: 'Holiday season photo blocks & secret Santa gifts',
+    offerText: 'Year End Sale',
+  },
+];
+
+export interface BudgetTier {
+  id: string;
+  range: string;
+  title: string;
+  subtitle: string;
+  badge: string;
+  slug: string;
+  image: string;
+}
+
+export const BUDGET_TIERS: BudgetTier[] = [
+  {
+    id: 'under-499',
+    range: 'Under ₹499',
+    title: 'Affordable Personalized Gifts',
+    subtitle: 'Tabletop acrylic blocks, mini cork tiles & photo posters',
+    badge: 'Pocket Friendly',
+    slug: 'deals',
+    image: 'https://images.unsplash.com/photo-1507646227500-4d389b0012be?w=400&auto=format&fit=crop&q=80',
+  },
+  {
+    id: '499-999',
+    range: '₹499 – ₹999',
+    title: 'Popular Gifting Options',
+    subtitle: '8x10 canvas prints, wooden photo frames & cork pinboards',
+    badge: 'Most Popular',
+    slug: 'canvas-prints',
+    image: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=400&auto=format&fit=crop&q=80',
+  },
+  {
+    id: '999-1999',
+    range: '₹999 – ₹1,999',
+    title: 'Premium Personalized Products',
+    subtitle: '16x24 gallery wrapped canvas & glossy acrylic float prints',
+    badge: 'Premium Picks',
+    slug: 'acrylic-prints',
+    image: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=400&auto=format&fit=crop&q=80',
+  },
+  {
+    id: '1999-plus',
+    range: '₹1,999+',
+    title: 'Premium Wall Decor & Gifts',
+    subtitle: 'Multi-panel triptychs, grand wall art sets & corporate displays',
+    badge: 'Luxury Finish',
+    slug: 'wall-decor',
+    image: 'https://images.unsplash.com/photo-1582561424760-0321d75e81fa?w=400&auto=format&fit=crop&q=80',
+  },
+];
+
 export const FEATURED_COLLECTIONS: CollectionItem[] = [
   {
     id: 'memories',

@@ -1,22 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Header } from './components/Header';
-import { Hero } from './components/Hero';
-import { StartOrder } from './components/StartOrder';
-import { PromoStrip } from './components/PromoStrip';
-import { CategoryGrid } from './components/CategoryGrid';
-import { TrendingProducts } from './components/TrendingProducts';
-import { MadePersonal } from './components/MadePersonal';
-import { OccasionSection } from './components/OccasionSection';
-import { FeaturedCollections } from './components/FeaturedCollections';
-import { DealsSection } from './components/DealsSection';
-import { HowItWorks } from './components/HowItWorks';
-import { CustomizerSection } from './components/CustomizerSection';
-import { CorporateSection } from './components/CorporateSection';
-import { TrustSection } from './components/TrustSection';
-import { RealSpaces } from './components/RealSpaces';
-import { Testimonials } from './components/Testimonials';
-import { FinalCTA } from './components/FinalCTA';
 import { Footer } from './components/Footer';
+
+// 3 Homepage Editions
+import { HomepageMarketplace } from './components/homepages/HomepageMarketplace';
+import { HomepagePrintStore } from './components/homepages/HomepagePrintStore';
+import { HomepageModernIndian } from './components/homepages/HomepageModernIndian';
+import { VersionSwitcher, VersionType } from './components/VersionSwitcher';
 
 // Modals and Drawers
 import { CartDrawer } from './components/CartDrawer';
@@ -28,7 +18,23 @@ import { AccentColorPicker } from './components/AccentColorPicker';
 import { TRENDING_PRODUCTS } from './data/storeData';
 import { Product, CartItem } from './types';
 
+// Mobile Bottom Nav Icons
+import { Home, Layers, Sparkles, Heart, ShoppingBag } from 'lucide-react';
+
 export function App() {
+  // Homepage Edition State (persisted in localStorage)
+  const [currentVersion, setCurrentVersion] = useState<VersionType>(() => {
+    try {
+      const saved = localStorage.getItem('ci_homepage_version') as VersionType;
+      if (saved === 'marketplace' || saved === 'print-store' || saved === 'modern-indian') {
+        return saved;
+      }
+    } catch {
+      // fallback
+    }
+    return 'marketplace';
+  });
+
   // State management
   const [cartDrawerOpen, setCartDrawerOpen] = useState(false);
   const [quoteModalOpen, setQuoteModalOpen] = useState(false);
@@ -167,112 +173,134 @@ export function App() {
   };
 
   const handleSelectCategory = (slug: string) => {
-    if (slug === 'corporate' || slug === 'corporate-printing' || slug === 'bulk-order' || slug === 'corporate-orders') {
+    if (slug === 'corporate' || slug === 'corporate-printing' || slug === 'bulk-order' || slug === 'corporate-orders' || slug === 'bulk-orders') {
       scrollToSection('corporate-section');
     } else if (slug === 'deals' || slug === 'sale') {
       scrollToSection('deals-section');
     } else if (slug === 'custom-prints') {
       scrollToSection('customizer-section');
+    } else if (slug === 'gifts' || slug === 'occasions' || slug === 'festivals') {
+      scrollToSection('shop-occasions');
     } else {
-      scrollToSection('trending-products');
+      scrollToSection('shop-categories');
     }
   };
 
+  const sharedHomepageProps = {
+    onSelectCategory: handleSelectCategory,
+    onAddToCart: handleAddToCart,
+    onCustomize: handleOpenCustomize,
+    onOpenQuote: () => setQuoteModalOpen(true),
+    wishlistIds,
+    onToggleWishlist: handleToggleWishlist,
+    onAddToCartCustom: handleAddToCartFromWorkbench,
+    allProducts: TRENDING_PRODUCTS,
+  };
+
+  const totalCartCount = cartItems.reduce((acc, i) => acc + i.quantity, 0);
+
   return (
-    <div className="min-h-screen bg-[#FFFDF9] text-stone-900 flex flex-col font-sans selection:bg-[var(--accent-bg)] selection:text-[var(--accent)]">
-      {/* 3-Layer E-commerce Header */}
+    <div className="min-h-screen bg-[#FFFDF9] text-stone-900 flex flex-col font-manrope selection:bg-[var(--accent-bg)] selection:text-[var(--accent)] pb-14 sm:pb-0">
+      
+      {/* 3-Layer Indian E-commerce Header */}
       <Header
-        cartCount={cartItems.reduce((acc, i) => acc + i.quantity, 0)}
+        variant={currentVersion === 'print-store' ? 'version2' : currentVersion === 'modern-indian' ? 'modern' : 'marketplace'}
+        cartCount={totalCartCount}
         wishlistCount={wishlistIds.length}
         onOpenCart={() => setCartDrawerOpen(true)}
         onOpenWishlist={() => setCartDrawerOpen(true)}
         onOpenQuote={() => setQuoteModalOpen(true)}
         onSelectCategory={handleSelectCategory}
-        onSearch={(query) => scrollToSection('trending-products')}
+        onSearch={(_query) => scrollToSection('shop-categories')}
         allProducts={TRENDING_PRODUCTS}
         onOpenCustomize={handleOpenCustomize}
       />
 
-      {/* Main Homepage Flow (Sections 6 through 21) */}
+      {/* Selected Homepage Variant */}
       <main className="flex-1">
-        {/* Section 6: Hero */}
-        <Hero
-          onStartCreating={() => scrollToSection('customizer-section')}
-          onExploreProducts={() => scrollToSection('shop-categories')}
-          onSelectCategory={handleSelectCategory}
-        />
-
-        {/* Section 7: Quick Shopping / Start Order */}
-        <StartOrder
-          onSelectCategory={handleSelectCategory}
-          onOpenCustomizer={() => handleOpenCustomize()}
-        />
-
-        {/* Section 8: Promotional Offer Strip */}
-        <PromoStrip
-          onShopDeals={() => scrollToSection('deals-section')}
-          onOpenCustomizer={() => handleOpenCustomize()}
-        />
-
-        {/* Section 9: Shop by Category */}
-        <CategoryGrid onSelectCategory={handleSelectCategory} />
-
-        {/* Section 10: Trending Products Grid */}
-        <TrendingProducts
-          products={TRENDING_PRODUCTS}
-          wishlistIds={wishlistIds}
-          onToggleWishlist={handleToggleWishlist}
-          onAddToCart={handleAddToCart}
-          onCustomize={handleOpenCustomize}
-        />
-
-        {/* Section 11: Made Personal Storytelling */}
-        <MadePersonal onStartCreating={() => scrollToSection('customizer-section')} />
-
-        {/* Section 12: Shop by Occasion */}
-        <OccasionSection onSelectOccasion={handleSelectCategory} />
-
-        {/* Section 13: Featured Collections */}
-        <FeaturedCollections onSelectCollection={handleSelectCategory} />
-
-        {/* Section 14: Deals & Budget Picks */}
-        <DealsSection
-          onAddToCart={handleAddToCart}
-          onCustomize={handleOpenCustomize}
-        />
-
-        {/* Section 15: How It Works */}
-        <HowItWorks />
-
-        {/* Section 16: Interactive Customization Section */}
-        <CustomizerSection
-          onStartCreating={() => handleOpenCustomize()}
-          onAddToCartCustom={handleAddToCartFromWorkbench}
-        />
-
-        {/* Section 17: Corporate & Bulk Orders */}
-        <CorporateSection onOpenQuote={() => setQuoteModalOpen(true)} />
-
-        {/* Section 18: Why Canvas India */}
-        <TrustSection />
-
-        {/* Section 19: Canvas India in Real Spaces */}
-        <RealSpaces />
-
-        {/* Section 20: Customer Reviews */}
-        <Testimonials />
-
-        {/* Section 21: Final CTA */}
-        <FinalCTA
-          onStartCreating={() => scrollToSection('customizer-section')}
-          onExploreProducts={() => scrollToSection('shop-categories')}
-        />
+        {currentVersion === 'marketplace' && (
+          <HomepageMarketplace {...sharedHomepageProps} />
+        )}
+        {currentVersion === 'print-store' && (
+          <HomepagePrintStore {...sharedHomepageProps} />
+        )}
+        {currentVersion === 'modern-indian' && (
+          <HomepageModernIndian {...sharedHomepageProps} />
+        )}
       </main>
 
-      {/* Section 22: Footer */}
+      {/* Indian E-Commerce Footer */}
       <Footer
+        variant={currentVersion === 'print-store' ? 'version2' : 'default'}
         onSelectCategory={handleSelectCategory}
         onOpenQuote={() => setQuoteModalOpen(true)}
+      />
+
+      {/* MOBILE BOTTOM NAVIGATION BAR (Flipkart / Amazon India Style) */}
+      <nav aria-label="Mobile Navigation" className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-stone-200/90 shadow-lg px-2 py-1.5 flex items-center justify-around">
+        <button
+          type="button"
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="flex flex-col items-center gap-0.5 text-stone-600 hover:text-[var(--accent)] text-[10px] font-semibold py-1 px-2 cursor-pointer"
+        >
+          <Home className="w-5 h-5 text-stone-700" />
+          <span>Home</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => scrollToSection('shop-categories')}
+          className="flex flex-col items-center gap-0.5 text-stone-600 hover:text-[var(--accent)] text-[10px] font-semibold py-1 px-2 cursor-pointer"
+        >
+          <Layers className="w-5 h-5 text-stone-700" />
+          <span>Categories</span>
+        </button>
+
+        {/* Center Customizer Highlight Button */}
+        <button
+          type="button"
+          onClick={() => handleOpenCustomize()}
+          className="flex flex-col items-center -mt-4 text-[10px] font-bold text-stone-900 cursor-pointer"
+        >
+          <div className="w-11 h-11 rounded-full bg-[var(--accent)] text-white flex items-center justify-center shadow-md shadow-[var(--accent)]/30 border-2 border-white">
+            <Sparkles className="w-5 h-5" />
+          </div>
+          <span className="mt-0.5 text-[10px] font-extrabold text-[var(--accent)]">Customize</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setCartDrawerOpen(true)}
+          className="flex flex-col items-center gap-0.5 text-stone-600 hover:text-[var(--accent)] text-[10px] font-semibold py-1 px-2 relative cursor-pointer"
+        >
+          <Heart className="w-5 h-5 text-stone-700" />
+          <span>Wishlist</span>
+          {wishlistIds.length > 0 && (
+            <span className="absolute top-0.5 right-2 bg-[var(--accent)] text-white text-[9px] font-bold w-3.5 h-3.5 rounded-full flex items-center justify-center">
+              {wishlistIds.length}
+            </span>
+          )}
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setCartDrawerOpen(true)}
+          className="flex flex-col items-center gap-0.5 text-stone-600 hover:text-[var(--accent)] text-[10px] font-semibold py-1 px-2 relative cursor-pointer"
+        >
+          <ShoppingBag className="w-5 h-5 text-stone-700" />
+          <span>Cart</span>
+          {totalCartCount > 0 && (
+            <span className="absolute top-0.5 right-2 bg-amber-500 text-stone-950 text-[9px] font-black w-3.5 h-3.5 rounded-full flex items-center justify-center">
+              {totalCartCount}
+            </span>
+          )}
+        </button>
+      </nav>
+
+      {/* Floating 3-Version Switcher */}
+      <VersionSwitcher
+        currentVersion={currentVersion}
+        onSelectVersion={(v) => setCurrentVersion(v)}
       />
 
       {/* Cart Drawer */}
