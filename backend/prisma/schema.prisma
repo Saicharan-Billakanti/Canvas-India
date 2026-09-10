@@ -736,6 +736,7 @@ model Warehouse {
   machines       Machine[]
   productionJobs ProductionJob[]
   shipments      Shipment[]
+  rtoCases RtoCase[]
 
   @@map("warehouses")
 }
@@ -994,6 +995,8 @@ model Shipment {
   warehouse       Warehouse      @relation(fields: [warehouseId], references: [id])
   items           ShipmentItem[]
   trackingEvents  TrackingEvent[]
+  ndrCases        NdrCase[]
+  rtoCases        RtoCase[]
 
   @@index([orderId])
   @@index([warehouseId])
@@ -1029,4 +1032,38 @@ model TrackingEvent {
 
   @@index([shipmentId, occurredAt])
   @@map("tracking_events")
+}
+
+model NdrCase {
+  id            String         @id @default(uuid())
+  shipmentId    String         @map("shipment_id")
+  reason        String
+  attemptNumber Int            @map("attempt_number")
+  status        ShippingStatus @default(NDR)
+  resolution    String?
+  createdAt     DateTime       @default(now()) @map("created_at")
+  updatedAt     DateTime       @updatedAt @map("updated_at")
+
+  shipment      Shipment       @relation(fields: [shipmentId], references: [id], onDelete: Cascade)
+
+  @@index([shipmentId])
+  @@index([status])
+  @@map("ndr_cases")
+}
+
+model RtoCase {
+  id              String    @id @default(uuid())
+  shipmentId      String    @map("shipment_id")
+  warehouseId     String    @map("warehouse_id")
+  receivedAt      DateTime? @map("received_at")
+  inventoryUpdated Boolean   @default(false) @map("inventory_updated")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  shipment        Shipment  @relation(fields: [shipmentId], references: [id], onDelete: Cascade)
+  warehouse       Warehouse @relation(fields: [warehouseId], references: [id])
+
+  @@index([shipmentId])
+  @@index([warehouseId])
+  @@map("rto_cases")
 }
