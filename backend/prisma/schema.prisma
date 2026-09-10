@@ -363,6 +363,7 @@ model Order {
   events     OrderEvent[]
   notes      OrderNote[]
   payments   Payment[]
+  shipments  Shipment[]
 
   createdAt  DateTime @default(now()) @map("created_at")
   updatedAt  DateTime @updatedAt @map("updated_at")
@@ -426,6 +427,7 @@ model OrderItem {
 
   artwork        Artwork?
   productionJob  ProductionJob?
+  shipmentItems  ShipmentItem[]
 
   @@map("order_items")
 }
@@ -733,6 +735,7 @@ model Warehouse {
 
   machines       Machine[]
   productionJobs ProductionJob[]
+  shipments      Shipment[]
 
   @@map("warehouses")
 }
@@ -974,4 +977,56 @@ model ProductionSlaRule {
 
   @@unique([productTypeId, stage])
   @@map("production_sla_rules")
+}
+
+// Shipping & courier lifecycle (scope §52-54, §80)
+model Shipment {
+  id              String         @id @default(uuid())
+  orderId         String         @map("order_id")
+  warehouseId     String         @map("warehouse_id")
+  courierProvider String         @map("courier_provider")
+  awbNumber       String?        @map("awb_number")
+  status          ShippingStatus @default(READY)
+  createdAt       DateTime       @default(now()) @map("created_at")
+  updatedAt       DateTime       @updatedAt @map("updated_at")
+
+  order           Order          @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  warehouse       Warehouse      @relation(fields: [warehouseId], references: [id])
+  items           ShipmentItem[]
+  trackingEvents  TrackingEvent[]
+
+  @@index([orderId])
+  @@index([warehouseId])
+  @@index([awbNumber])
+  @@map("shipments")
+}
+
+model ShipmentItem {
+  id           String     @id @default(uuid())
+  shipmentId   String     @map("shipment_id")
+  orderItemId  String     @map("order_item_id")
+  quantity     Int
+  createdAt    DateTime   @default(now()) @map("created_at")
+
+  shipment     Shipment   @relation(fields: [shipmentId], references: [id], onDelete: Cascade)
+  orderItem    OrderItem  @relation(fields: [orderItemId], references: [id])
+
+  @@unique([shipmentId, orderItemId])
+  @@index([orderItemId])
+  @@map("shipment_items")
+}
+
+model TrackingEvent {
+  id          String         @id @default(uuid())
+  shipmentId  String         @map("shipment_id")
+  status      ShippingStatus
+  description String?
+  location    String?
+  occurredAt  DateTime       @default(now()) @map("occurred_at")
+  createdAt   DateTime       @default(now()) @map("created_at")
+
+  shipment    Shipment       @relation(fields: [shipmentId], references: [id], onDelete: Cascade)
+
+  @@index([shipmentId, occurredAt])
+  @@map("tracking_events")
 }
