@@ -2,10 +2,12 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from '../../generated/prisma/client.js';
 import { PrismaService } from '../../database/prisma.service.js';
 import { PricingService } from '../../catalog/pricing/pricing.service.js';
+import { DiscountsService } from '../../growth/discounts/discounts.service.js';
 
 export interface PricedCart {
   id: string;
   customerId: string | null;
+  status: string;
   items: {
     id: string;
     variantId: string;
@@ -15,6 +17,9 @@ export interface PricedCart {
     lineTotal: Prisma.Decimal;
   }[];
   subtotal: Prisma.Decimal;
+  discount: Prisma.Decimal;
+  discountCode: string | null;
+  total: Prisma.Decimal;
 }
 
 @Injectable()
@@ -22,6 +27,7 @@ export class CartService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly pricingService: PricingService,
+    private readonly discountsService: DiscountsService,
   ) {}
 
   async getOrCreateForCustomer(customerId: string) {
@@ -40,8 +46,6 @@ export class CartService {
     configuration?: Record<string, unknown>,
     designVersionId?: string,
   ) {
-    // A customized line (with its own design) is never merged into an existing
-    // line — each design version is a distinct purchase (scope §21-24).
     const existingItem = designVersionId
       ? null
       : await this.prisma.cartItem.findFirst({ where: { cartId, variantId, designVersionId: null } });
@@ -62,15 +66,85 @@ export class CartService {
     return this.prisma.cartItem.delete({ where: { id: cartItemId } });
   }
 
+  async applyDiscount(cartId: string, code: string): Promise<PricedCart> {
+    const cart = await this.prisma.cart.findUnique({
+      where: { id: cartId },
+      include: {
+        items: {
+          include: {
+            variant: {
+              include: {
+                product: { include: { categories: true } },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!cart) {
+      throw new NotFoundException(`Cart ${cartId} not found`);
+    }
+
+    let subtotal = new Prisma.Decimal(0);
+    const itemContexts = [];
+
+    for (const item of cart.items) {
+      const breakdown = await this.pricingService.calculateVariantPrice(item.variantId, item.quantity);
+      subtotal = subtotal.plus(breakdown.lineTotal);
+      itemContexts.push({
+        variantId: item.variantId,
+        quantity: item.quantity,
+        unitPrice: breakdown.unitPrice.toNumber(),
+        productId: item.variant.productId,
+        categoryIds: item.variant.product.categories.map((c) => c.categoryId),
+      });
+    }
+
+    // Validate discount against cart items and customer
+    await this.discountsService.validateDiscount({
+      code,
+      customerId: cart.customerId ?? undefined,
+      cartId: cart.id,
+      items: itemContexts,
+      subtotal: subtotal.toNumber(),
+    });
+
+    await this.prisma.cart.update({
+      where: { id: cartId },
+      data: { discountCode: code.trim().toUpperCase() },
+    });
+
+    return this.priceCart(cartId);
+  }
+
+  async removeDiscount(cartId: string): Promise<PricedCart> {
+    await this.prisma.cart.update({
+      where: { id: cartId },
+      data: { discountCode: null },
+    });
+
+    return this.priceCart(cartId);
+  }
+
   /**
    * Recomputes every line and the subtotal server-side (scope §45: never
-   * trust a frontend-submitted total). This is what checkout must call
-   * immediately before creating an order.
+   * trust a frontend-submitted total). Applies discount if code present on cart.
    */
   async priceCart(cartId: string): Promise<PricedCart> {
     const cart = await this.prisma.cart.findUnique({
       where: { id: cartId },
-      include: { items: true },
+      include: {
+        items: {
+          include: {
+            variant: {
+              include: {
+                product: { include: { categories: true } },
+              },
+            },
+          },
+        },
+      },
     });
 
     if (!cart) {
@@ -79,6 +153,7 @@ export class CartService {
 
     let subtotal = new Prisma.Decimal(0);
     const items = [];
+    const itemContexts = [];
 
     for (const item of cart.items) {
       const breakdown = await this.pricingService.calculateVariantPrice(item.variantId, item.quantity);
@@ -91,8 +166,44 @@ export class CartService {
         unitPrice: breakdown.unitPrice,
         lineTotal: breakdown.lineTotal,
       });
+      itemContexts.push({
+        variantId: item.variantId,
+        quantity: item.quantity,
+        unitPrice: breakdown.unitPrice.toNumber(),
+        productId: item.variant?.productId,
+        categoryIds: item.variant?.product?.categories?.map((c) => c.categoryId) ?? [],
+      });
     }
 
-    return { id: cart.id, customerId: cart.customerId, items, subtotal };
+    let discount = new Prisma.Decimal(0);
+
+    if (cart.discountCode && items.length > 0) {
+      try {
+        const validation = await this.discountsService.validateDiscount({
+          code: cart.discountCode,
+          customerId: cart.customerId ?? undefined,
+          cartId: cart.id,
+          items: itemContexts,
+          subtotal: subtotal.toNumber(),
+        });
+        discount = validation.discountAmount;
+      } catch {
+        // If discount becomes invalid (e.g. subtotal reduced below minOrderSubtotal), discount is 0
+        discount = new Prisma.Decimal(0);
+      }
+    }
+
+    const total = Prisma.Decimal.max(new Prisma.Decimal(0), subtotal.minus(discount));
+
+    return {
+      id: cart.id,
+      customerId: cart.customerId,
+      status: cart.status,
+      items,
+      subtotal,
+      discount,
+      discountCode: cart.discountCode,
+      total,
+    };
   }
 }
