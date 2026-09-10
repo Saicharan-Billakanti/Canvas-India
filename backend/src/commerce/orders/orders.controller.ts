@@ -1,4 +1,4 @@
-import { Body, Controller, Get, NotImplementedException, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { OrdersService } from './orders.service.js';
 import { CreateOrderDto } from './dto/create-order.dto.js';
 import { RefundOrderDto } from './dto/refund-order.dto.js';
@@ -41,9 +41,8 @@ export class OrdersController {
   // deferred until gateway credentials are provisioned — see payments/adapters.
   @Post(':id/refund')
   @RequirePermissions('orders.refund')
-  refund(@Param('id') _id: string, @Body() _dto: RefundOrderDto) {
-    throw new NotImplementedException(
-      'Refunds require a configured payment gateway adapter; not available until Razorpay credentials are provisioned',
-    );
+  refund(@Param('id') id: string, @Body() dto: RefundOrderDto) {
+    return this.ordersService.refund(id, dto.amount, dto.reason);
   }
 }
+

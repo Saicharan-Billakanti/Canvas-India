@@ -364,6 +364,8 @@ model Order {
   notes      OrderNote[]
   payments   Payment[]
   shipments  Shipment[]
+  returnRequests      ReturnRequest[]
+  replacementRequests ReplacementRequest[]
 
   createdAt  DateTime @default(now()) @map("created_at")
   updatedAt  DateTime @updatedAt @map("updated_at")
@@ -426,8 +428,10 @@ model OrderItem {
   createdAt DateTime @default(now()) @map("created_at")
 
   artwork        Artwork?
-  productionJob  ProductionJob?
+  productionJobs ProductionJob[]
   shipmentItems  ShipmentItem[]
+  returnRequests      ReturnRequest[]
+  replacementRequests ReplacementRequest[]
 
   @@map("order_items")
 }
@@ -477,6 +481,58 @@ model OrderNote {
   createdAt   DateTime   @default(now()) @map("created_at")
 
   @@map("order_notes")
+}
+
+model ReturnRequest {
+  id          String       @id @default(uuid())
+  orderId     String       @map("order_id")
+  orderItemId String       @map("order_item_id")
+  reason      String
+  status      ReturnStatus @default(REQUESTED)
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @updatedAt @map("updated_at")
+
+  order     Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderItem OrderItem @relation(fields: [orderItemId], references: [id])
+
+  @@index([orderId])
+  @@index([orderItemId])
+  @@index([status])
+  @@map("return_requests")
+}
+
+model ReplacementRequest {
+  id              String             @id @default(uuid())
+  orderId         String             @map("order_id")
+  orderItemId     String             @map("order_item_id")
+  complaintReason String             @map("complaint_reason")
+  status          ReplacementStatus  @default(REQUESTED)
+  createdAt       DateTime            @default(now()) @map("created_at")
+  updatedAt       DateTime            @updatedAt @map("updated_at")
+
+  order     Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderItem OrderItem @relation(fields: [orderItemId], references: [id])
+
+  @@index([orderId])
+  @@index([orderItemId])
+  @@index([status])
+  @@map("replacement_requests")
+}
+
+enum ReturnStatus {
+  REQUESTED
+  REVIEW
+  APPROVED
+  RETURNED
+  REFUNDED
+}
+
+enum ReplacementStatus {
+  REQUESTED
+  REVIEW
+  APPROVED
+  COMPLETED
+  REJECTED
 }
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -770,7 +826,7 @@ enum MachineStatus {
 // order item is approved (see ArtworkService.approve).
 model ProductionJob {
   id           String              @id @default(uuid())
-  orderItemId  String              @unique @map("order_item_id")
+  orderItemId  String              @map("order_item_id")
   orderItem    OrderItem           @relation(fields: [orderItemId], references: [id])
   warehouseId  String?             @map("warehouse_id")
   warehouse    Warehouse?          @relation(fields: [warehouseId], references: [id])
@@ -1067,3 +1123,4 @@ model RtoCase {
   @@index([warehouseId])
   @@map("rto_cases")
 }
+

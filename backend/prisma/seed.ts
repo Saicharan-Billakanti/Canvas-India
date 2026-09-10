@@ -34,8 +34,10 @@ const PERMISSIONS = [
   'shipping.view',
   'shipping.create',
   'shipping.cancel',
-  'ndr.view'
+  'ndr.view',
   'ndr.action',
+  'returns.view',
+  'returns.manage',
   'finance.view',
 
   // Customization Engine (Phase 2)
@@ -194,3 +196,4 @@ main()
   .finally(async () => {
     await prisma.$disconnect();
   });
+
