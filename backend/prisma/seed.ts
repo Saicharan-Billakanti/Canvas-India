@@ -34,6 +34,8 @@ const PERMISSIONS = [
   'shipping.view',
   'shipping.create',
   'shipping.cancel',
+  'ndr.view'
+  'ndr.action',
   'finance.view',
 
   // Customization Engine (Phase 2)
