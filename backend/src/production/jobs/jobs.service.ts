@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { Prisma } from '../../generated/prisma/client.js';
 import { PrismaService } from '../../database/prisma.service.js';
 import { SlaService } from '../sla/sla.service.js';
 
@@ -68,14 +69,29 @@ export class JobsService {
    * type. Called by ArtworkService.approve once an approved artwork is tied
    * to a real order item — completing Order -> Artwork -> Production.
    */
-  async createForOrderItem(orderItemId: string) {
-    const existing = await this.prisma.productionJob.findUnique({ where: { orderItemId } });
-    if (existing) return existing;
+  async createForOrderItem(
+    orderItemId: string,
+    forceNew = false,
+    tx?: Prisma.TransactionClient,
+  ) {
+    const db = tx ?? this.prisma;
 
-    const orderItem = await this.prisma.orderItem.findUnique({
+    if (!forceNew) {
+      const existing = await db.productionJob.findFirst({
+        where: { orderItemId },
+        orderBy: { createdAt: 'asc' },
+      });
+
+      if (existing) {
+        return existing;
+      }
+    }
+
+    const orderItem = await db.orderItem.findUnique({
       where: { id: orderItemId },
       include: { variant: { include: { product: true } } },
     });
+
     if (!orderItem) {
       throw new NotFoundException(`Order item ${orderItemId} not found`);
     }
@@ -83,26 +99,52 @@ export class JobsService {
     const productTypeId = orderItem.variant?.product.productTypeId;
     const now = new Date();
 
-    return this.prisma.$transaction(async (tx) => {
-      const job = await tx.productionJob.create({
+    const createJob = async (client: Prisma.TransactionClient) => {
+      const job = await client.productionJob.create({
         data: {
           orderItemId,
           status: 'QUEUED',
-          events: { create: { type: 'production.created', message: 'Production job created' } },
+          events: {
+            create: {
+              type: 'production.created',
+              message: 'Production job created',
+            },
+          },
         },
       });
 
       let cursor = now;
-      for (const stage of PIPELINE_STAGES) {
-        const slaDueAt = productTypeId ? await this.slaService.resolveDueDate(productTypeId, stage, cursor) : null;
-        if (slaDueAt) cursor = slaDueAt;
 
-        await tx.productionJobStage.create({
-          data: { productionJobId: job.id, stage, status: 'PENDING', slaDueAt },
+      for (const stage of PIPELINE_STAGES) {
+        const slaDueAt = productTypeId
+          ? await this.slaService.resolveDueDate(productTypeId, stage, cursor)
+          : null;
+
+        if (slaDueAt) {
+          cursor = slaDueAt;
+        }
+
+        await client.productionJobStage.create({
+          data: {
+            productionJobId: job.id,
+            stage,
+            status: 'PENDING',
+            slaDueAt,
+          },
         });
       }
 
-      return tx.productionJob.findUnique({ where: { id: job.id }, include: { stages: true } });
-    });
+      return client.productionJob.findUnique({
+        where: { id: job.id },
+        include: { stages: true },
+      });
+    };
+
+    if (tx) {
+      return createJob(tx);
+    }
+
+    return this.prisma.$transaction(createJob);
   }
 }
+

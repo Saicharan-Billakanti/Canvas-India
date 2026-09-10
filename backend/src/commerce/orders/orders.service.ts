@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, NotImplementedException } from '@nestjs/common';
 import { Prisma } from '../../generated/prisma/client.js';
 import { PrismaService } from '../../database/prisma.service.js';
 import { CartService } from '../cart/cart.service.js';
@@ -166,6 +166,11 @@ export class OrdersService {
     return updated;
   }
 
+  async refund(_id: string, _amount: string, _reason?: string) {
+    throw new NotImplementedException(
+      'Refunds require a configured payment gateway adapter; not available until Razorpay credentials are provisioned',
+    );
+  }
   async addNote(orderId: string, note: string, adminUserId?: string) {
     return this.prisma.orderNote.create({ data: { orderId, note, adminUserId } });
   }
@@ -175,3 +180,4 @@ export class OrdersService {
     return `CC${10000 + count + 1}`;
   }
 }
+
