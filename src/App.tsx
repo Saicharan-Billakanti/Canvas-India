@@ -1,12 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
-
-// 3 Homepage Editions
-import { HomepageMarketplace } from './components/homepages/HomepageMarketplace';
-import { HomepagePrintStore } from './components/homepages/HomepagePrintStore';
-import { HomepageModernIndian } from './components/homepages/HomepageModernIndian';
-import { VersionSwitcher, VersionType } from './components/VersionSwitcher';
+import { Homepage } from './components/Homepage';
 
 // Modals and Drawers
 import { CartDrawer } from './components/CartDrawer';
@@ -22,19 +17,6 @@ import { Product, CartItem } from './types';
 import { Home, Layers, Sparkles, Heart, ShoppingBag } from 'lucide-react';
 
 export function App() {
-  // Homepage Edition State (persisted in localStorage)
-  const [currentVersion, setCurrentVersion] = useState<VersionType>(() => {
-    try {
-      const saved = localStorage.getItem('ci_homepage_version') as VersionType;
-      if (saved === 'marketplace' || saved === 'print-store' || saved === 'modern-indian') {
-        return saved;
-      }
-    } catch {
-      // fallback
-    }
-    return 'marketplace';
-  });
-
   // State management
   const [cartDrawerOpen, setCartDrawerOpen] = useState(false);
   const [quoteModalOpen, setQuoteModalOpen] = useState(false);
@@ -178,7 +160,7 @@ export function App() {
     } else if (slug === 'deals' || slug === 'sale') {
       scrollToSection('deals-section');
     } else if (slug === 'custom-prints') {
-      scrollToSection('customizer-section');
+      scrollToSection('create-something-new');
     } else if (slug === 'gifts' || slug === 'occasions' || slug === 'festivals') {
       scrollToSection('shop-occasions');
     } else {
@@ -202,9 +184,8 @@ export function App() {
   return (
     <div className="min-h-screen bg-[#FFFDF9] text-stone-900 flex flex-col font-manrope selection:bg-[var(--accent-bg)] selection:text-[var(--accent)] pb-14 sm:pb-0">
       
-      {/* 3-Layer Indian E-commerce Header */}
+      {/* Royal Blue Header + White Category Nav */}
       <Header
-        variant={currentVersion === 'print-store' ? 'version2' : currentVersion === 'modern-indian' ? 'modern' : 'marketplace'}
         cartCount={totalCartCount}
         wishlistCount={wishlistIds.length}
         onOpenCart={() => setCartDrawerOpen(true)}
@@ -216,32 +197,23 @@ export function App() {
         onOpenCustomize={handleOpenCustomize}
       />
 
-      {/* Selected Homepage Variant */}
+      {/* Single Consolidated Canvas India Homepage */}
       <main className="flex-1">
-        {currentVersion === 'marketplace' && (
-          <HomepageMarketplace {...sharedHomepageProps} />
-        )}
-        {currentVersion === 'print-store' && (
-          <HomepagePrintStore {...sharedHomepageProps} />
-        )}
-        {currentVersion === 'modern-indian' && (
-          <HomepageModernIndian {...sharedHomepageProps} />
-        )}
+        <Homepage {...sharedHomepageProps} />
       </main>
 
       {/* Indian E-Commerce Footer */}
       <Footer
-        variant={currentVersion === 'print-store' ? 'version2' : 'default'}
         onSelectCategory={handleSelectCategory}
         onOpenQuote={() => setQuoteModalOpen(true)}
       />
 
-      {/* MOBILE BOTTOM NAVIGATION BAR (Flipkart / Amazon India Style) */}
+      {/* MOBILE BOTTOM NAVIGATION BAR */}
       <nav aria-label="Mobile Navigation" className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-stone-200/90 shadow-lg px-2 py-1.5 flex items-center justify-around">
         <button
           type="button"
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="flex flex-col items-center gap-0.5 text-stone-600 hover:text-[var(--accent)] text-[10px] font-semibold py-1 px-2 cursor-pointer"
+          className="flex flex-col items-center gap-0.5 text-stone-600 hover:text-[#0E4A93] text-[10px] font-semibold py-1 px-2 cursor-pointer"
         >
           <Home className="w-5 h-5 text-stone-700" />
           <span>Home</span>
@@ -250,7 +222,7 @@ export function App() {
         <button
           type="button"
           onClick={() => scrollToSection('shop-categories')}
-          className="flex flex-col items-center gap-0.5 text-stone-600 hover:text-[var(--accent)] text-[10px] font-semibold py-1 px-2 cursor-pointer"
+          className="flex flex-col items-center gap-0.5 text-stone-600 hover:text-[#0E4A93] text-[10px] font-semibold py-1 px-2 cursor-pointer"
         >
           <Layers className="w-5 h-5 text-stone-700" />
           <span>Categories</span>
@@ -262,21 +234,21 @@ export function App() {
           onClick={() => handleOpenCustomize()}
           className="flex flex-col items-center -mt-4 text-[10px] font-bold text-stone-900 cursor-pointer"
         >
-          <div className="w-11 h-11 rounded-full bg-[var(--accent)] text-white flex items-center justify-center shadow-md shadow-[var(--accent)]/30 border-2 border-white">
+          <div className="w-11 h-11 rounded-full bg-[#E8752A] text-white flex items-center justify-center shadow-md shadow-[#E8752A]/30 border-2 border-white">
             <Sparkles className="w-5 h-5" />
           </div>
-          <span className="mt-0.5 text-[10px] font-extrabold text-[var(--accent)]">Customize</span>
+          <span className="mt-0.5 text-[10px] font-extrabold text-[#E8752A]">Customize</span>
         </button>
 
         <button
           type="button"
           onClick={() => setCartDrawerOpen(true)}
-          className="flex flex-col items-center gap-0.5 text-stone-600 hover:text-[var(--accent)] text-[10px] font-semibold py-1 px-2 relative cursor-pointer"
+          className="flex flex-col items-center gap-0.5 text-stone-600 hover:text-[#0E4A93] text-[10px] font-semibold py-1 px-2 relative cursor-pointer"
         >
           <Heart className="w-5 h-5 text-stone-700" />
           <span>Wishlist</span>
           {wishlistIds.length > 0 && (
-            <span className="absolute top-0.5 right-2 bg-[var(--accent)] text-white text-[9px] font-bold w-3.5 h-3.5 rounded-full flex items-center justify-center">
+            <span className="absolute top-0.5 right-2 bg-[#E8752A] text-white text-[9px] font-bold w-3.5 h-3.5 rounded-full flex items-center justify-center">
               {wishlistIds.length}
             </span>
           )}
@@ -285,23 +257,17 @@ export function App() {
         <button
           type="button"
           onClick={() => setCartDrawerOpen(true)}
-          className="flex flex-col items-center gap-0.5 text-stone-600 hover:text-[var(--accent)] text-[10px] font-semibold py-1 px-2 relative cursor-pointer"
+          className="flex flex-col items-center gap-0.5 text-stone-600 hover:text-[#0E4A93] text-[10px] font-semibold py-1 px-2 relative cursor-pointer"
         >
           <ShoppingBag className="w-5 h-5 text-stone-700" />
           <span>Cart</span>
           {totalCartCount > 0 && (
-            <span className="absolute top-0.5 right-2 bg-amber-500 text-stone-950 text-[9px] font-black w-3.5 h-3.5 rounded-full flex items-center justify-center">
+            <span className="absolute top-0.5 right-2 bg-[#E8752A] text-white text-[9px] font-black w-3.5 h-3.5 rounded-full flex items-center justify-center">
               {totalCartCount}
             </span>
           )}
         </button>
       </nav>
-
-      {/* Floating 3-Version Switcher */}
-      <VersionSwitcher
-        currentVersion={currentVersion}
-        onSelectVersion={(v) => setCurrentVersion(v)}
-      />
 
       {/* Cart Drawer */}
       <CartDrawer
