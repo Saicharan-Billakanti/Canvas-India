@@ -71,6 +71,7 @@ const PERMISSIONS = [
   'segments.manage',
   'abandoned_carts.view',
   'abandoned_carts.manage',
+  'analytics.view',
 ];
 
 async function main() {
