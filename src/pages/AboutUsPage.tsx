@@ -1,326 +1,417 @@
-import React from 'react';
-import { PolicyPageLayout } from '../components/PolicyPageLayout';
-import { PolicySection } from '../components/PolicySection';
+import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { 
+  ArrowRight, 
+  Sparkles, 
+  Award, 
+  Truck, 
+  ShieldCheck, 
+  Layers, 
+  Palette, 
+  Heart,
+  Eye,
+  ShoppingBag,
+  Upload
+} from 'lucide-react';
+import { useShop } from '../context/ShopContext';
+import { PRIMARY_CATEGORIES } from '../data/storeData';
 
 export const AboutUsPage: React.FC = () => {
+  const { onOpenCustomize } = useShop();
+
+  useEffect(() => {
+    document.title = 'About Us | Canvas India — Handcrafted Personalized Art & Printing';
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
-    <PolicyPageLayout title="About Us">
-      <p className="text-lg font-semibold text-stone-800">
-        Creative Production House for Art, D&eacute;cor &amp; Custom Visual Solutions
-      </p>
-      <p className="text-lg font-semibold text-[var(--accent)]">Transforming Ideas into Beautiful Spaces</p>
+    <div className="w-full bg-[#FFFDF9] text-stone-900 font-manrope selection:bg-[var(--accent-bg)] selection:text-[var(--accent)]">
+      
+      {/* ========================================================================= */}
+      {/* 1. ABOUT US HERO (Warm, Editorial, Box-Free)                             */}
+      {/* ========================================================================= */}
+      <section className="w-full bg-[#FBF7F0] border-b border-[#EAE3D9] py-14 sm:py-20 lg:py-24">
+        <div className="w-full max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-14">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+            
+            <div className="lg:col-span-7 space-y-6 text-left">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white text-[#0E4A93] text-xs font-bold shadow-xs border border-stone-200/80">
+                <Sparkles className="w-3.5 h-3.5 text-[#E8752A]" />
+                <span>Handcrafted in India • Dedicated Print Studio</span>
+              </div>
 
-      <p>
-        Canvass India is a creative production house specializing in canvas frames, acrylic artwork, posters,
-        cork products, yoga mats, wall d&eacute;cor, and customized home and lifestyle d&eacute;cor solutions. We
-        bring together creativity, quality materials, modern production techniques, and meticulous finishing to
-        create products that add character, personality, and style to every space.
-      </p>
-      <p>
-        From a single customized artwork to large-scale d&eacute;cor requirements for homes, offices, hotels,
-        studios, retail spaces, institutions, and commercial interiors, Canvass India delivers solutions designed
-        to match every vision, requirement, and budget.
-      </p>
-      <p>Our philosophy is simple &mdash; create products that look beautiful, feel premium, and are made to last.</p>
+              <h1 
+                className="text-3xl sm:text-5xl lg:text-6xl font-bold text-stone-900 tracking-tight leading-[1.15]"
+                style={{ fontFamily: 'Georgia, "Times New Roman", serif', fontStyle: 'italic' }}
+              >
+                We Turn Memories Into Things You Can Keep.
+              </h1>
 
-      <PolicySection heading="Our Product Range">
-        <p className="font-semibold text-stone-800">Canvas Frames</p>
-        <p>Bring photographs, artwork, memories, and creative designs to life with our premium canvas frames.</p>
-        <p>Our canvas printing and framing solutions are suitable for:</p>
-        <ul className="list-disc pl-6 space-y-1">
-          <li>Family and personal photographs</li>
-          <li>Wedding and celebration memories</li>
-          <li>Artistic reproductions</li>
-          <li>Nature and landscape artwork</li>
-          <li>Motivational and inspirational designs</li>
-          <li>Religious and spiritual artwork</li>
-          <li>Corporate and office d&eacute;cor</li>
-          <li>Hotel and hospitality interiors</li>
-          <li>Restaurants and caf&eacute;s</li>
-          <li>Bedroom and living-room d&eacute;cor</li>
-          <li>Customized gifting</li>
-        </ul>
-        <p>We offer different sizes, layouts, finishes, and frame styles to complement contemporary as well as traditional interiors.</p>
-        <p>
-          Our canvas products combine high-quality printing, carefully selected canvas material, sturdy frames,
-          and professional finishing, resulting in artwork that becomes a lasting part of your d&eacute;cor.
-        </p>
-      </PolicySection>
+              <p className="text-base sm:text-lg text-stone-600 leading-relaxed max-w-2xl">
+                Canvas India is a personalized printing and gifting brand creating beautiful products from the moments, people and ideas that matter. From custom cotton canvas wraps to crystal-clear acrylic glass and eco-cork pinboards, every piece is made to order with pride.
+              </p>
 
-      <PolicySection heading="Acrylic Prints & Acrylic Wall Art">
-        <p>For a modern, elegant, and premium appearance, acrylic prints are an excellent choice.</p>
-        <p>
-          Canvass India produces high-quality acrylic posters, acrylic photo panels, artwork, signage, and
-          decorative panels with sharp imagery and vibrant visual impact.
-        </p>
-        <p>
-          Acrylic is particularly suitable for contemporary homes, corporate offices, showrooms, hotels,
-          restaurants, reception areas, and premium commercial interiors.
-        </p>
-        <p className="font-semibold text-stone-800">Applications include:</p>
-        <ul className="list-disc pl-6 space-y-1">
-          <li>Photo panels</li>
-          <li>Wall art</li>
-          <li>Interior d&eacute;cor</li>
-          <li>Corporate branding</li>
-          <li>Office graphics</li>
-          <li>Reception-area artwork</li>
-          <li>Retail displays</li>
-          <li>Restaurant d&eacute;cor</li>
-          <li>Hotel d&eacute;cor</li>
-          <li>Customized gifts</li>
-          <li>Inspirational artwork</li>
-          <li>Decorative panels</li>
-        </ul>
-        <p>
-          Our acrylic solutions can be customized in different sizes and formats, allowing designers, architects,
-          businesses, and homeowners to create distinctive visual installations.
-        </p>
-      </PolicySection>
+              <div className="flex flex-wrap items-center gap-4 pt-2">
+                <button
+                  type="button"
+                  onClick={() => onOpenCustomize()}
+                  className="px-6 py-3.5 rounded-xl bg-[#0E4A93] hover:bg-[#09356A] text-white font-bold text-sm flex items-center gap-2 shadow-sm transition-all cursor-pointer"
+                >
+                  <span>Start Creating Online</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+                <Link
+                  to="/"
+                  className="px-6 py-3.5 rounded-xl bg-white hover:bg-stone-100 text-stone-800 font-bold text-sm border border-stone-300 transition-all"
+                >
+                  Explore Collection
+                </Link>
+              </div>
+            </div>
 
-      <PolicySection heading="Posters & Custom Wall Graphics">
-        <p>A great wall can completely transform the personality of a room.</p>
-        <p>
-          Canvass India produces custom posters and wall graphics for both decorative and functional
-          applications. Whether you need a striking artwork for your living room, an inspirational poster for
-          your workspace, or a complete visual theme for a commercial interior, we can produce customized
-          solutions according to your design.
-        </p>
-        <p>Our poster production is suitable for:</p>
-        <ul className="list-disc pl-6 space-y-1">
-          <li>Home interiors</li>
-          <li>Bedrooms</li>
-          <li>Living rooms</li>
-          <li>Children&apos;s rooms</li>
-          <li>Offices</li>
-          <li>Gyms and fitness studios</li>
-          <li>Schools and institutions</li>
-          <li>Restaurants and caf&eacute;s</li>
-          <li>Retail stores</li>
-          <li>Hotels</li>
-          <li>Events and exhibitions</li>
-        </ul>
-        <p>Customers can choose from existing artwork or provide their own photographs, artwork, illustrations, designs, and branding materials.</p>
-      </PolicySection>
+            {/* Hero Visual Display */}
+            <div className="lg:col-span-5">
+              <div className="relative aspect-[4/3] rounded-3xl overflow-hidden shadow-xl">
+                <img
+                  src="https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?w=900&auto=format&fit=crop&q=80"
+                  alt="Canvas India Artisan Framing"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+                <div className="absolute bottom-5 left-5 right-5 text-left text-white">
+                  <div className="text-xs uppercase font-bold tracking-widest text-amber-300">Curated Craft</div>
+                  <div className="text-sm font-semibold mt-0.5">Where digital memories meet physical artisan craftsmanship</div>
+                </div>
+              </div>
+            </div>
 
-      <PolicySection heading="Cork Products & Cork D&eacute;cor">
-        <p>Cork is a versatile, natural-looking material that brings warmth, texture, and functionality into interiors.</p>
-        <p>
-          Canvass India offers cork-based d&eacute;cor and functional products suitable for homes, offices,
-          educational spaces, creative studios, caf&eacute;s, and commercial interiors.
-        </p>
-        <p className="font-semibold text-stone-800">Cork applications:</p>
-        <ul className="list-disc pl-6 space-y-1">
-          <li>Cork boards</li>
-          <li>Notice boards</li>
-          <li>Pin boards</li>
-          <li>Decorative cork panels</li>
-          <li>Office organization boards</li>
-          <li>Kids&apos; learning boards</li>
-          <li>Memory boards</li>
-          <li>Photo display boards</li>
-          <li>Creative wall d&eacute;cor</li>
-          <li>Customized cork products</li>
-        </ul>
-        <p>
-          Cork products can be customized according to size, shape, design, and application, making them an
-          excellent combination of natural aesthetics and everyday functionality.
-        </p>
-      </PolicySection>
+          </div>
+        </div>
+      </section>
 
-      <PolicySection heading="Yoga Mats & Fitness Products">
-        <p>
-          Canvass India also develops and produces yoga mats and customized fitness-related products designed
-          for yoga studios, gyms, wellness centers, corporate wellness programs, events, and personal use.
-        </p>
-        <p>
-          Our yoga mats can be customized for branding and visual identity, making them particularly suitable
-          for organizations looking for promotional or branded wellness products.
-        </p>
-        <p className="font-semibold text-stone-800">Suitable for:</p>
-        <ul className="list-disc pl-6 space-y-1">
-          <li>Yoga studios</li>
-          <li>Fitness centers</li>
-          <li>Wellness resorts</li>
-          <li>Corporate wellness programs</li>
-          <li>Events and workshops</li>
-          <li>Schools and institutions</li>
-          <li>Personalized gifting</li>
-          <li>Promotional campaigns</li>
-        </ul>
-        <p>Whether you need a simple yoga mat or a customized branded solution, Canvass India can help bring your concept into production.</p>
-      </PolicySection>
+      {/* ========================================================================= */}
+      {/* 2. OUR STORY (Warm, Authentic Indian Brand Story)                        */}
+      {/* ========================================================================= */}
+      <section className="w-full py-16 sm:py-24 border-b border-stone-200">
+        <div className="w-full max-w-4xl mx-auto px-4 sm:px-8 text-left space-y-8">
+          <div className="space-y-3">
+            <span className="text-xs uppercase font-bold tracking-widest text-[#E8752A]">
+              Authentic Purpose
+            </span>
+            <h2 
+              className="text-2xl sm:text-4xl font-bold text-stone-900 tracking-tight"
+              style={{ fontFamily: 'Georgia, "Times New Roman", serif', fontStyle: 'italic' }}
+            >
+              Our Story
+            </h2>
+          </div>
 
-      <PolicySection heading="Home D&eacute;cor Collection">
-        <p>Your home should reflect your personality.</p>
-        <p>
-          Canvass India creates a wide range of decorative and personalized products designed to add beauty,
-          warmth, and individuality to interiors.
-        </p>
-        <p>Our home d&eacute;cor solutions can include:</p>
-        <ul className="list-disc pl-6 space-y-1">
-          <li>Canvas wall art</li>
-          <li>Acrylic artwork</li>
-          <li>Posters</li>
-          <li>Photo d&eacute;cor</li>
-          <li>Cork d&eacute;cor</li>
-          <li>Inspirational wall art</li>
-          <li>Personalized artwork</li>
-          <li>Decorative panels</li>
-          <li>Customized wall displays</li>
-          <li>Kids&apos; room d&eacute;cor</li>
-          <li>Bedroom d&eacute;cor</li>
-          <li>Living-room d&eacute;cor</li>
-          <li>Office d&eacute;cor</li>
-        </ul>
-        <p>From minimal contemporary designs to vibrant artistic compositions, we create d&eacute;cor products that work beautifully across different interior styles.</p>
-      </PolicySection>
+          <div className="space-y-5 text-base sm:text-lg text-stone-700 leading-relaxed font-normal">
+            <p>
+              In an age where thousands of family milestones, travel adventures, and festive memories remain locked away in smartphone photo galleries, Canvas India was founded with a clear mission: <strong>bring your most meaningful moments into your living spaces as physical art.</strong>
+            </p>
+            <p>
+              We operate a specialized printing studio that pairs modern 12-color archival pigment printers with master woodwork and framing traditions. Rather than mass-producing generic decor, every order is treated individually. From delicate skin-tone adjustments on wedding portraits to precision laser polishing on acrylic desk blocks, our craftspeople take personal pride in every inch of artwork that leaves our workshop.
+            </p>
+            <p>
+              Whether you are decorating your first apartment living room, celebrating parents&apos; milestone anniversaries, or fitting out contemporary corporate offices, Canvas India delivers museum-standard art with hassle-free doorstep delivery across India.
+            </p>
+          </div>
+        </div>
+      </section>
 
-      <PolicySection heading="Customized Production">
-        <p>At Canvass India, customization is at the heart of what we do.</p>
-        <p>
-          We understand that every customer, designer, architect, and business has different requirements. That
-          is why we offer custom production based on size, artwork, material, quantity, finish, and application.
-        </p>
-        <p className="font-semibold text-stone-800">
-          You can provide: Your Design &rarr; Your Size &rarr; Your Material &rarr; Your Finish &rarr; Our Production
-        </p>
-        <p>Our team works with the supplied artwork or design concept and converts it into a professionally finished physical product.</p>
-        <p>We can support both individual orders and bulk production requirements.</p>
-      </PolicySection>
+      {/* ========================================================================= */}
+      {/* 3. WHAT WE CREATE (Box-Free Category Showcase)                           */}
+      {/* ========================================================================= */}
+      <section className="w-full py-16 sm:py-24 bg-[#FFFDF9] border-b border-stone-200">
+        <div className="w-full max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-14">
+          <div className="text-left space-y-2 mb-12">
+            <span className="text-xs uppercase font-bold tracking-widest text-[#0E4A93]">
+              Product Spectrum
+            </span>
+            <h2 
+              className="text-2xl sm:text-4xl font-bold text-stone-900 tracking-tight"
+              style={{ fontFamily: 'Georgia, "Times New Roman", serif', fontStyle: 'italic' }}
+            >
+              What We Create
+            </h2>
+            <p className="text-sm text-stone-600 max-w-2xl">
+              Five signature product families designed to elevate Indian homes, gifting occasions, and modern workplaces.
+            </p>
+          </div>
 
-      <PolicySection heading="Solutions for Interior Designers & Architects">
-        <p>
-          Canvass India works as a production partner for interior designers, architects, decorators,
-          contractors, hospitality professionals, and commercial-space developers.
-        </p>
-        <p>We understand the importance of accurate dimensions, consistent quality, finishing, and timely production when working on interior projects.</p>
-        <p>Our products can be incorporated into:</p>
-        <ul className="list-disc pl-6 space-y-1">
-          <li>Residential interiors</li>
-          <li>Corporate offices</li>
-          <li>Hotels</li>
-          <li>Restaurants</li>
-          <li>Caf&eacute;s</li>
-          <li>Retail stores</li>
-          <li>Schools</li>
-          <li>Hospitals</li>
-          <li>Gyms</li>
-          <li>Yoga studios</li>
-          <li>Wellness centers</li>
-          <li>Showrooms</li>
-          <li>Hospitality projects</li>
-          <li>Commercial interiors</li>
-        </ul>
-        <p>From individual wall pieces to multiple-product d&eacute;cor packages, Canvass India provides production support for complete interior requirements.</p>
-      </PolicySection>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 text-left">
+            
+            {/* Canvas */}
+            <div className="space-y-3">
+              <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-stone-100 shadow-xs group">
+                <img
+                  src="https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=500&auto=format&fit=crop&q=80"
+                  alt="Canvas Prints"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+              <h3 className="font-bold text-base text-stone-900">Canvas</h3>
+              <p className="text-xs text-stone-600 leading-relaxed">
+                Personalized canvas wall art. Stretched 380 GSM cotton canvas mounted on kiln-dried pine wood with gallery wrap edges.
+              </p>
+              <Link to="/" className="inline-flex items-center gap-1 text-xs font-bold text-[#0E4A93] hover:text-[#E8752A] transition-colors">
+                <span>Explore Canvas</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
 
-      <PolicySection heading="Corporate & Commercial D&eacute;cor">
-        <p>A well-designed workspace communicates professionalism and brand identity.</p>
-        <p>We provide customized d&eacute;cor and visual products for businesses looking to create attractive and engaging environments.</p>
-        <p>Solutions can include:</p>
-        <ul className="list-disc pl-6 space-y-1">
-          <li>Corporate wall art</li>
-          <li>Brand graphics</li>
-          <li>Motivational artwork</li>
-          <li>Acrylic panels</li>
-          <li>Posters</li>
-          <li>Office d&eacute;cor</li>
-          <li>Reception artwork</li>
-          <li>Employee recognition displays</li>
-          <li>Meeting-room graphics</li>
-          <li>Training-room d&eacute;cor</li>
-          <li>Brand-focused wall installations</li>
-        </ul>
-        <p>We can produce customized products based on corporate brand guidelines, colours, logos, photographs, and design requirements.</p>
-      </PolicySection>
+            {/* Acrylic */}
+            <div className="space-y-3">
+              <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-stone-100 shadow-xs group">
+                <img
+                  src="https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=500&auto=format&fit=crop&q=80"
+                  alt="Acrylic Prints"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+              <h3 className="font-bold text-base text-stone-900">Acrylic</h3>
+              <p className="text-xs text-stone-600 leading-relaxed">
+                Modern acrylic photo products. High-gloss 5mm cast acrylic with vibrant color depth and stainless steel standoffs.
+              </p>
+              <Link to="/" className="inline-flex items-center gap-1 text-xs font-bold text-[#0E4A93] hover:text-[#E8752A] transition-colors">
+                <span>Explore Acrylic</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
 
-      <PolicySection heading="Quality & Finishing">
-        <p>At Canvass India, we believe that quality is not only about the material &mdash; it is about the complete finished product.</p>
-        <p>We pay attention to:</p>
-        <ul className="list-disc pl-6 space-y-2">
-          <li><span className="font-semibold text-stone-800">Material Selection</span> &mdash; Choosing suitable materials according to the application.</li>
-          <li><span className="font-semibold text-stone-800">Print Quality</span> &mdash; Producing sharp, detailed, and visually appealing graphics.</li>
-          <li><span className="font-semibold text-stone-800">Colour &amp; Image Reproduction</span> &mdash; Maintaining strong visual consistency and accurate artwork reproduction.</li>
-          <li><span className="font-semibold text-stone-800">Construction</span> &mdash; Ensuring products are properly assembled and finished.</li>
-          <li><span className="font-semibold text-stone-800">Edge &amp; Surface Finishing</span> &mdash; Giving attention to the details that make a finished product look premium.</li>
-          <li><span className="font-semibold text-stone-800">Packaging</span> &mdash; Taking care to protect products during handling and transportation.</li>
-        </ul>
-      </PolicySection>
+            {/* Cork */}
+            <div className="space-y-3">
+              <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-stone-100 shadow-xs group">
+                <img
+                  src="https://images.unsplash.com/photo-1586075010923-2dd4570fb338?w=500&auto=format&fit=crop&q=80"
+                  alt="Cork Prints"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+              <h3 className="font-bold text-base text-stone-900">Cork</h3>
+              <p className="text-xs text-stone-600 leading-relaxed">
+                Unique cork-based personalized products. 100% natural compressed cork travel pinboards, calendars and modular tiles.
+              </p>
+              <Link to="/" className="inline-flex items-center gap-1 text-xs font-bold text-[#0E4A93] hover:text-[#E8752A] transition-colors">
+                <span>Explore Cork</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
 
-      <PolicySection heading="From Digital Design to Physical Product">
-        <p>Canvass India bridges the gap between digital creativity and physical d&eacute;cor.</p>
-        <p>A photograph, illustration, artwork, brand design, or creative idea can be transformed into a finished product that becomes part of a real environment.</p>
-        <p className="font-semibold text-stone-800">Our Process</p>
-        <ol className="list-decimal pl-6 space-y-1">
-          <li><span className="font-semibold">Idea</span> &mdash; Share your requirement, concept, photograph, artwork, or design.</li>
-          <li><span className="font-semibold">Design</span> &mdash; We help prepare the artwork according to the selected product and dimensions.</li>
-          <li><span className="font-semibold">Material</span> &mdash; Select the appropriate canvas, acrylic, poster, cork, mat, or other material.</li>
-          <li><span className="font-semibold">Production</span> &mdash; Our production team converts the approved artwork into the finished product.</li>
-          <li><span className="font-semibold">Finishing</span> &mdash; The product is checked and professionally finished.</li>
-          <li><span className="font-semibold">Delivery</span> &mdash; The completed product is carefully packed and prepared for delivery or installation.</li>
-        </ol>
-      </PolicySection>
+            {/* Custom Prints */}
+            <div className="space-y-3">
+              <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-stone-100 shadow-xs group">
+                <img
+                  src="https://images.unsplash.com/photo-1526738549149-8e07eca6c147?w=500&auto=format&fit=crop&q=80"
+                  alt="Custom Prints"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+              <h3 className="font-bold text-base text-stone-900">Custom Prints</h3>
+              <p className="text-xs text-stone-600 leading-relaxed">
+                Personalized printing and photo products. Upload your own digital photography or digital designs with custom sizing.
+              </p>
+              <button onClick={() => onOpenCustomize()} className="inline-flex items-center gap-1 text-xs font-bold text-[#0E4A93] hover:text-[#E8752A] transition-colors cursor-pointer">
+                <span>Customize Now</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
 
-      <PolicySection heading="Why Canvass India?">
-        <ul className="list-disc pl-6 space-y-2">
-          <li><span className="font-semibold text-stone-800">Creative Approach</span> &mdash; We combine design thinking with practical production expertise.</li>
-          <li><span className="font-semibold text-stone-800">Wide Product Portfolio</span> &mdash; Canvas, acrylic, posters, cork, yoga mats, and other d&eacute;cor solutions under one roof.</li>
-          <li><span className="font-semibold text-stone-800">Custom Manufacturing</span> &mdash; Products can be made according to your required size, design, quantity, and application.</li>
-          <li><span className="font-semibold text-stone-800">Quality Materials</span> &mdash; We focus on selecting materials suitable for the intended use and finish.</li>
-          <li><span className="font-semibold text-stone-800">Professional Finishing</span> &mdash; Attention to detail helps create products with a premium appearance.</li>
-          <li><span className="font-semibold text-stone-800">Bulk Production</span> &mdash; We support projects requiring multiple products and consistent output.</li>
-          <li><span className="font-semibold text-stone-800">One-Stop Production Partner</span> &mdash; Instead of coordinating with multiple vendors, customers can source a wide range of d&eacute;cor products through one production house.</li>
-        </ul>
-      </PolicySection>
+            {/* Gifts */}
+            <div className="space-y-3">
+              <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-stone-100 shadow-xs group">
+                <img
+                  src="https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=500&auto=format&fit=crop&q=80"
+                  alt="Gifts and Occasions"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+              <h3 className="font-bold text-base text-stone-900">Gifts</h3>
+              <p className="text-xs text-stone-600 leading-relaxed">
+                Personalized gifts for important occasions. Freestanding 20mm desktop blocks, anniversary collages and festive sets.
+              </p>
+              <Link to="/" className="inline-flex items-center gap-1 text-xs font-bold text-[#0E4A93] hover:text-[#E8752A] transition-colors">
+                <span>Explore Gifts</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
 
-      <PolicySection heading="For Homes, Businesses & Creative Spaces">
-        <p>
-          Whether you are decorating a new home, renovating an office, setting up a hotel, opening a caf&eacute;,
-          designing a studio, creating a wellness centre, or developing a commercial interior, Canvass India
-          provides creative production solutions to bring your walls and spaces to life.
-        </p>
-        <p>We believe d&eacute;cor should not simply fill an empty wall.</p>
-        <p>It should create an atmosphere. It should express an identity. It should tell a story.</p>
-        <p>That is what we aim to create with every product.</p>
-      </PolicySection>
+          </div>
+        </div>
+      </section>
 
-      <PolicySection heading="Our Vision">
-        <p>
-          To become a trusted and innovative production house for custom d&eacute;cor, visual products, lifestyle
-          materials, and creative interior solutions, delivering quality products that combine design,
-          functionality, and craftsmanship.
-        </p>
-      </PolicySection>
+      {/* ========================================================================= */}
+      {/* 4. WHY CANVAS INDIA (4 Core Pillars, Box-Free)                            */}
+      {/* ========================================================================= */}
+      <section className="w-full py-16 sm:py-24 bg-[#FBF7F0] border-b border-[#EAE3D9]">
+        <div className="w-full max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-14">
+          <div className="text-left space-y-2 mb-12">
+            <span className="text-xs uppercase font-bold tracking-widest text-[#E8752A]">
+              Our Commitments
+            </span>
+            <h2 
+              className="text-2xl sm:text-4xl font-bold text-stone-900 tracking-tight"
+              style={{ fontFamily: 'Georgia, "Times New Roman", serif', fontStyle: 'italic' }}
+            >
+              Why Canvas India?
+            </h2>
+          </div>
 
-      <PolicySection heading="Our Mission">
-        <p>
-          To make high-quality customized d&eacute;cor accessible to homeowners, businesses, designers,
-          architects, institutions, and creative professionals through reliable production, diverse materials,
-          professional finishing, and customer-focused service.
-        </p>
-      </PolicySection>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-left">
+            <div className="space-y-3">
+              <div className="w-12 h-12 rounded-2xl bg-[#0E4A93]/10 text-[#0E4A93] flex items-center justify-center">
+                <Heart className="w-6 h-6" />
+              </div>
+              <h3 className="font-bold text-lg text-stone-900">Made For You</h3>
+              <p className="text-xs sm:text-sm text-stone-600 leading-relaxed">
+                Every personalized product is individually crafted around your memories, custom dimensions, and preferred finish.
+              </p>
+            </div>
 
-      <PolicySection>
-        <p className="text-lg font-semibold text-stone-800">Canvass India</p>
-        <p className="font-semibold text-[var(--accent)]">Create. Print. Frame. Decorate.</p>
-        <p>
-          From a memorable photograph to a statement wall, from a creative poster to a functional cork board,
-          from premium acrylic artwork to a branded yoga mat &mdash; Canvass India turns ideas into finished
-          products.
-        </p>
-        <p className="font-semibold text-stone-800">Your Design. Your Vision. Our Production.</p>
-        <p>Canvass India &mdash; Bringing Creative Ideas to Life.</p>
-      </PolicySection>
+            <div className="space-y-3">
+              <div className="w-12 h-12 rounded-2xl bg-[#E8752A]/10 text-[#E8752A] flex items-center justify-center">
+                <Sparkles className="w-6 h-6" />
+              </div>
+              <h3 className="font-bold text-lg text-stone-900">Easy Customization</h3>
+              <p className="text-xs sm:text-sm text-stone-600 leading-relaxed">
+                Create your product online in minutes with real-time size selection, material previews, and instant crop previews.
+              </p>
+            </div>
 
-      <PolicySection heading="Contact Us">
-        <p>Email: info@canvassindia.com</p>
-        <p>Contact number: 78930 51555</p>
-        <p>
-          Address: Building No./Flat No. H NO 4-9-197/8184, HMT Nagar, HMT Nagar Main Road, Nacharam, Hyderabad,
-          Hyderabad District, Telangana &ndash; 500076
-        </p>
-      </PolicySection>
-    </PolicyPageLayout>
+            <div className="space-y-3">
+              <div className="w-12 h-12 rounded-2xl bg-emerald-700/10 text-emerald-700 flex items-center justify-center">
+                <Award className="w-6 h-6" />
+              </div>
+              <h3 className="font-bold text-lg text-stone-900">Premium Quality</h3>
+              <p className="text-xs sm:text-sm text-stone-600 leading-relaxed">
+                Professional 12-color archival inks, 380 GSM cotton canvas, and optical-grade cast acrylic ensure 50+ year longevity.
+              </p>
+            </div>
+
+            <div className="space-y-3">
+              <div className="w-12 h-12 rounded-2xl bg-amber-700/10 text-amber-700 flex items-center justify-center">
+                <Truck className="w-6 h-6" />
+              </div>
+              <h3 className="font-bold text-lg text-stone-900">Pan-India Delivery</h3>
+              <p className="text-xs sm:text-sm text-stone-600 leading-relaxed">
+                Insured express delivery covering 19,000+ PIN codes across India with custom multi-layer protective packaging.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ========================================================================= */}
+      {/* 5. OUR PROCESS (From Your Photo To Your Product)                         */}
+      {/* ========================================================================= */}
+      <section className="w-full py-16 sm:py-24 border-b border-stone-200">
+        <div className="w-full max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-14">
+          <div className="text-left space-y-2 mb-14">
+            <span className="text-xs uppercase font-bold tracking-widest text-[#0E4A93]">
+              Simple 4-Step Journey
+            </span>
+            <h2 
+              className="text-2xl sm:text-4xl font-bold text-stone-900 tracking-tight"
+              style={{ fontFamily: 'Georgia, "Times New Roman", serif', fontStyle: 'italic' }}
+            >
+              From Your Photo To Your Product
+            </h2>
+            <p className="text-sm text-stone-600 max-w-xl">
+              Turn your digital photographs into gallery-worthy prints in four straightforward steps.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-left">
+            
+            {/* 01 */}
+            <div className="space-y-3">
+              <span className="text-3xl font-extrabold text-[#0E4A93] opacity-40 font-mono">01</span>
+              <h3 className="font-bold text-base text-stone-900 flex items-center gap-2">
+                <Upload className="w-4 h-4 text-[#0E4A93]" />
+                <span>Upload</span>
+              </h3>
+              <p className="text-xs sm:text-sm text-stone-600 leading-relaxed">
+                Choose your photo from your phone, laptop or cloud storage. High-resolution files give optimal depth.
+              </p>
+            </div>
+
+            {/* 02 */}
+            <div className="space-y-3">
+              <span className="text-3xl font-extrabold text-[#0E4A93] opacity-40 font-mono">02</span>
+              <h3 className="font-bold text-base text-stone-900 flex items-center gap-2">
+                <Palette className="w-4 h-4 text-[#0E4A93]" />
+                <span>Customize</span>
+              </h3>
+              <p className="text-xs sm:text-sm text-stone-600 leading-relaxed">
+                Choose your size, layout, edge wrapping, and frame finish to match your room aesthetic.
+              </p>
+            </div>
+
+            {/* 03 */}
+            <div className="space-y-3">
+              <span className="text-3xl font-extrabold text-[#0E4A93] opacity-40 font-mono">03</span>
+              <h3 className="font-bold text-base text-stone-900 flex items-center gap-2">
+                <Eye className="w-4 h-4 text-[#0E4A93]" />
+                <span>Preview</span>
+              </h3>
+              <p className="text-xs sm:text-sm text-stone-600 leading-relaxed">
+                See exactly how your product looks in realistic 3D mockup before production begins.
+              </p>
+            </div>
+
+            {/* 04 */}
+            <div className="space-y-3">
+              <span className="text-3xl font-extrabold text-[#0E4A93] opacity-40 font-mono">04</span>
+              <h3 className="font-bold text-base text-stone-900 flex items-center gap-2">
+                <ShoppingBag className="w-4 h-4 text-[#0E4A93]" />
+                <span>Order</span>
+              </h3>
+              <p className="text-xs sm:text-sm text-stone-600 leading-relaxed">
+                Place your order securely via UPI or Card. We print, frame, pack and deliver to your doorstep.
+              </p>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* ========================================================================= */}
+      {/* 6. ABOUT US CTA (Have a Memory Worth Framing?)                           */}
+      {/* ========================================================================= */}
+      <section className="w-full py-16 sm:py-24 bg-[#082C59] text-white">
+        <div className="w-full max-w-4xl mx-auto px-4 sm:px-8 text-center space-y-6">
+          <h2 
+            className="text-3xl sm:text-5xl font-bold tracking-tight"
+            style={{ fontFamily: 'Georgia, "Times New Roman", serif', fontStyle: 'italic' }}
+          >
+            Have a Memory Worth Framing?
+          </h2>
+
+          <p className="text-base sm:text-lg text-blue-100 max-w-xl mx-auto leading-relaxed">
+            Create something special with Canvas India. Bring your favorite moments to life today.
+          </p>
+
+          <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
+            <button
+              type="button"
+              onClick={() => onOpenCustomize()}
+              className="px-8 py-3.5 rounded-xl bg-[#E8752A] hover:bg-[#D3631A] text-white font-bold text-sm flex items-center gap-2 shadow-lg transition-all cursor-pointer"
+            >
+              <span>Start Creating &rarr;</span>
+            </button>
+            <Link
+              to="/"
+              className="px-8 py-3.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-sm border border-white/30 transition-all"
+            >
+              Shop Products &rarr;
+            </Link>
+          </div>
+        </div>
+      </section>
+
+    </div>
   );
 };
+
+export default AboutUsPage;

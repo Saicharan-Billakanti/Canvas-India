@@ -1,24 +1,36 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
+import { ShopProvider } from './context/ShopContext';
+import { RootLayout } from './components/RootLayout';
 import { HomePage } from './pages/HomePage';
+import { ProductDetailPage } from './pages/ProductDetailPage';
+import { AboutUsPage } from './pages/AboutUsPage';
 import { PrivacyPolicyPage } from './pages/PrivacyPolicyPage';
 import { TermsConditionsPage } from './pages/TermsConditionsPage';
 import { ShippingDeliveryPage } from './pages/ShippingDeliveryPage';
 import { CancellationPolicyPage } from './pages/CancellationPolicyPage';
 import { RefundReturnPage } from './pages/RefundReturnPage';
-import { AboutUsPage } from './pages/AboutUsPage';
+import { NotFoundPage } from './pages/NotFoundPage';
 
 export function App() {
   return (
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
-      <Route path="/terms-and-conditions" element={<TermsConditionsPage />} />
-      <Route path="/shipping-policy" element={<ShippingDeliveryPage />} />
-      <Route path="/cancellation-policy" element={<CancellationPolicyPage />} />
-      <Route path="/refund-policy" element={<RefundReturnPage />} />
-      <Route path="/about-us" element={<AboutUsPage />} />
-    </Routes>
+    <ShopProvider>
+      <Routes>
+        <Route element={<RootLayout />}>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/products/:productId" element={<ProductDetailPage />} />
+          <Route path="/about-us" element={<AboutUsPage />} />
+          <Route path="/about" element={<AboutUsPage />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+          <Route path="/terms-and-conditions" element={<TermsConditionsPage />} />
+          <Route path="/terms" element={<TermsConditionsPage />} />
+          <Route path="/shipping-policy" element={<ShippingDeliveryPage />} />
+          <Route path="/cancellation-policy" element={<CancellationPolicyPage />} />
+          <Route path="/refund-policy" element={<RefundReturnPage />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Route>
+      </Routes>
+    </ShopProvider>
   );
 }
 

@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
-import { CanvasIndiaLogo } from './CanvasIndiaLogo';
-import { Footer } from './Footer';
 
 interface PolicyPageLayoutProps {
   title: string;
@@ -10,9 +8,9 @@ interface PolicyPageLayoutProps {
 }
 
 /**
- * Shared chrome for standalone legal/info pages (Privacy Policy, Terms, Shipping,
- * Cancellation, Refund, About Us). Uses a lightweight static header instead of the
- * full homepage Header, since these pages don't need cart/search/mega-menu state.
+ * Shared container for standalone legal policy pages (Privacy Policy, Terms, Shipping,
+ * Cancellation, Refund). Preserves the exact text and section markup while seamlessly
+ * fitting into the unified RootLayout shell.
  */
 export const PolicyPageLayout: React.FC<PolicyPageLayoutProps> = ({ title, children }) => {
   useEffect(() => {
@@ -21,37 +19,24 @@ export const PolicyPageLayout: React.FC<PolicyPageLayoutProps> = ({ title, child
   }, [title]);
 
   return (
-    <div className="min-h-screen bg-[#FFFDF9] text-stone-900 flex flex-col font-manrope">
-      <header className="border-b border-stone-200 bg-white">
-        <div className="max-w-5xl mx-auto px-4 sm:px-8 py-4 flex items-center justify-between">
-          <Link to="/" aria-label="Canvas India home">
-            <CanvasIndiaLogo className="h-9 w-auto" />
-          </Link>
+    <div className="w-full bg-[#FFFDF9] py-10 sm:py-16 text-left font-manrope">
+      <div className="max-w-4xl mx-auto px-4 sm:px-8">
+        <div className="mb-6">
           <Link
             to="/"
-            className="inline-flex items-center gap-1.5 text-sm font-semibold text-stone-600 hover:text-[var(--accent)] transition-colors"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-stone-500 hover:text-[#0E4A93] transition-colors"
           >
-            <ArrowLeft className="w-4 h-4" />
-            Back to home
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span>Back to home</span>
           </Link>
         </div>
-      </header>
-
-      <main className="flex-1 w-full max-w-3xl mx-auto px-4 sm:px-8 py-12 sm:py-16">
-        <h1 className="text-2xl sm:text-3xl font-bold text-stone-900 mb-8 text-wrap-balance">{title}</h1>
+        <h1 className="text-2xl sm:text-4xl font-bold text-stone-900 mb-8 tracking-tight">
+          {title}
+        </h1>
         <div className="policy-content space-y-6 text-[15px] leading-relaxed text-stone-700">
           {children}
         </div>
-      </main>
-
-      <Footer
-        onSelectCategory={() => {
-          window.location.href = '/';
-        }}
-        onOpenQuote={() => {
-          window.location.href = '/';
-        }}
-      />
+      </div>
     </div>
   );
 };

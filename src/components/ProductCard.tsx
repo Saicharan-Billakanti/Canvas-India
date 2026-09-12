@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Star, Heart, ArrowRight } from 'lucide-react';
 import { Product } from '../types';
 
@@ -21,21 +22,24 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   return (
     <div className="group flex flex-col justify-between text-left select-none">
       <div>
-        {/* Compact Product Image (approx 120-160px visual height, unboxed, floating) */}
-        <div 
-          className="relative aspect-square max-h-[160px] w-full rounded-lg overflow-hidden bg-stone-100 cursor-pointer"
-          onClick={() => onCustomize(product)}
-        >
-          <img
-            src={product.image}
-            alt={product.name}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-            loading="lazy"
-          />
+        {/* Compact Product Image linked to /products/:id */}
+        <div className="relative aspect-square max-h-[160px] w-full rounded-lg overflow-hidden bg-stone-100">
+          <Link 
+            to={`/products/${product.id}`}
+            className="block w-full h-full cursor-pointer"
+            title={`View ${product.name}`}
+          >
+            <img
+              src={product.image}
+              alt={product.name}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              loading="lazy"
+            />
+          </Link>
 
           {/* Subtle Discount Pill */}
           {product.discountPercent > 0 && (
-            <div className="absolute top-2 left-2 bg-[#E8752A] text-white text-[9px] font-black uppercase px-1.5 py-0.5 rounded shadow-2xs tracking-wide">
+            <div className="pointer-events-none absolute top-2 left-2 bg-[#E8752A] text-white text-[9px] font-black uppercase px-1.5 py-0.5 rounded shadow-2xs tracking-wide">
               {product.discountPercent}% OFF
             </div>
           )}
@@ -45,9 +49,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             type="button"
             onClick={(e) => {
               e.stopPropagation();
+              e.preventDefault();
               onToggleWishlist(product.id);
             }}
-            className="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/90 hover:bg-white text-stone-600 hover:text-rose-600 flex items-center justify-center transition-all shadow-xs cursor-pointer"
+            className="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/90 hover:bg-white text-stone-600 hover:text-rose-600 flex items-center justify-center transition-all shadow-xs cursor-pointer z-10"
             aria-label="Wishlist"
             title={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
           >
@@ -55,14 +60,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           </button>
         </div>
 
-        {/* Title */}
-        <h4 
-          onClick={() => onCustomize(product)}
-          className="font-semibold text-xs sm:text-[13px] text-stone-900 line-clamp-1 group-hover:text-[#0E4A93] transition-colors mt-2 cursor-pointer"
+        {/* Title linked to /products/:id */}
+        <Link 
+          to={`/products/${product.id}`}
+          className="block font-semibold text-xs sm:text-[13px] text-stone-900 line-clamp-1 group-hover:text-[#0E4A93] transition-colors mt-2 cursor-pointer"
           title={product.name}
         >
           {product.name}
-        </h4>
+        </Link>
 
         {/* Pricing Row */}
         <div className="flex items-baseline gap-1.5 mt-0.5">
@@ -91,7 +96,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       <div className="mt-2 pt-1 flex items-center gap-2">
         <button
           type="button"
-          onClick={() => onCustomize(product)}
+          onClick={(e) => {
+            e.stopPropagation();
+            onCustomize(product);
+          }}
           className="text-[11px] font-bold text-[#0E4A93] hover:text-[#E8752A] flex items-center gap-1 transition-colors cursor-pointer"
         >
           <span>Customize</span>
@@ -100,7 +108,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         <span className="text-stone-300">•</span>
         <button
           type="button"
-          onClick={() => onAddToCart(product)}
+          onClick={(e) => {
+            e.stopPropagation();
+            onAddToCart(product);
+          }}
           className="text-[11px] font-medium text-stone-600 hover:text-stone-950 transition-colors cursor-pointer"
         >
           + Add

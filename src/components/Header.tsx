@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { 
   Search, 
   ShoppingCart, 
@@ -244,9 +245,8 @@ export const Header: React.FC<HeaderProps> = ({
             
             {/* 1. OFFICIAL CANVAS INDIA LOGO (Left Anchored, 24px-40px from viewport left) */}
             <div className="shrink-0 flex items-center">
-              <a 
-                href="#" 
-                onClick={(e) => { e.preventDefault(); handleNavClick('canvas-prints'); }}
+              <Link 
+                to="/" 
                 className="block transition-opacity hover:opacity-95 cursor-pointer py-0.5"
                 title="Canvas India - Personalized Canvas, Acrylic & Cork Prints"
               >
@@ -255,7 +255,7 @@ export const Header: React.FC<HeaderProps> = ({
                   alt="Canvas India"
                   className="w-[130px] lg:w-[140px] xl:w-[148px] h-auto object-contain block select-none"
                 />
-              </a>
+              </Link>
             </div>
 
             {/* 2. LARGE HORIZONTAL SEARCH BAR (Starts immediately beside logo) */}
@@ -410,9 +410,8 @@ export const Header: React.FC<HeaderProps> = ({
               >
                 <Menu className="w-6 h-6" />
               </button>
-              <a 
-                href="#" 
-                onClick={(e) => { e.preventDefault(); handleNavClick('canvas-prints'); }}
+              <Link 
+                to="/" 
                 className="flex items-center shrink-0"
               >
                 <img
@@ -420,7 +419,7 @@ export const Header: React.FC<HeaderProps> = ({
                   alt="Canvas India"
                   className="w-[115px] sm:w-[125px] h-auto object-contain block select-none"
                 />
-              </a>
+              </Link>
             </div>
 
             <div className="flex items-center gap-1.5">
@@ -757,9 +756,9 @@ export const Header: React.FC<HeaderProps> = ({
         <div className="lg:hidden fixed inset-0 z-50 bg-black/60 flex">
           <div className="w-80 bg-white h-full shadow-2xl flex flex-col">
             <div className="p-4 bg-[#0E4A93] text-white flex items-center justify-between">
-              <div className="flex items-center">
+              <Link to="/" onClick={() => setMobileMenuOpen(false)} className="flex items-center">
                 <img src="/canvas-india-official-logo.png" alt="Canvas India" className="w-[125px] h-auto object-contain" />
-              </div>
+              </Link>
               <button type="button" onClick={() => setMobileMenuOpen(false)} className="p-1 text-white hover:text-stone-300">
                 <X className="w-6 h-6" />
               </button>
