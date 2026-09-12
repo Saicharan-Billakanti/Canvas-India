@@ -81,7 +81,10 @@ export const Footer: React.FC<FooterProps> = ({ onSelectCategory, onOpenQuote })
             <p className="text-stone-400 text-[11px] leading-relaxed">
               India's preferred personalized art & printing studio. Handcrafted custom canvas, museum-grade acrylics, eco-cork, and premium photo frames.
             </p>
-            
+            <Link to="/about-us" className="inline-block text-[11px] font-semibold text-[#E8752A] hover:text-white transition-colors">
+              About Us &rarr;
+            </Link>
+
             <div className="pt-1 space-y-1.5 text-[11px]">
               <div className="flex items-center gap-2 text-white font-medium">
                 <Phone className="w-3.5 h-3.5 text-[#E8752A]" />
