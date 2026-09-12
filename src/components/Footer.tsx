@@ -1,10 +1,11 @@
 import React from 'react';
-import { 
-  Phone, 
-  Mail, 
-  MapPin, 
-  ShieldCheck, 
-  Truck, 
+import { Link } from 'react-router-dom';
+import {
+  Phone,
+  Mail,
+  MapPin,
+  ShieldCheck,
+  Truck,
   CreditCard,
   MessageCircle,
   FileText,
@@ -41,7 +42,7 @@ export const Footer: React.FC<FooterProps> = ({ onSelectCategory, onOpenQuote, v
               </div>
               <h4 className="font-bold text-xs uppercase tracking-wider text-[#171717]">Company</h4>
               <ul className="space-y-1.5 text-[#736D66]">
-                <li><a href="#" className="hover:text-[#C94F32] transition-colors">About Us</a></li>
+                <li><Link to="/about-us" className="hover:text-[#C94F32] transition-colors">About Us</Link></li>
                 <li><a href="#" className="hover:text-[#C94F32] transition-colors">Contact Us</a></li>
                 <li><a href="#" className="hover:text-[#C94F32] transition-colors">Careers</a></li>
                 <li><a href="#" className="hover:text-[#C94F32] transition-colors">Blog</a></li>
@@ -77,10 +78,11 @@ export const Footer: React.FC<FooterProps> = ({ onSelectCategory, onOpenQuote, v
             <div className="space-y-2.5">
               <h4 className="font-bold text-xs uppercase tracking-wider text-[#171717]">Policies</h4>
               <ul className="space-y-1.5 text-[#736D66]">
-                <li><a href="#" className="hover:text-[#C94F32] transition-colors">Privacy Policy</a></li>
-                <li><a href="#" className="hover:text-[#C94F32] transition-colors">Terms &amp; Conditions</a></li>
-                <li><a href="#" className="hover:text-[#C94F32] transition-colors">Refund Policy</a></li>
-                <li><a href="#" className="hover:text-[#C94F32] transition-colors">Shipping Policy</a></li>
+                <li><Link to="/privacy-policy" className="hover:text-[#C94F32] transition-colors">Privacy Policy</Link></li>
+                <li><Link to="/terms-and-conditions" className="hover:text-[#C94F32] transition-colors">Terms &amp; Conditions</Link></li>
+                <li><Link to="/refund-policy" className="hover:text-[#C94F32] transition-colors">Refund Policy</Link></li>
+                <li><Link to="/shipping-policy" className="hover:text-[#C94F32] transition-colors">Shipping Policy</Link></li>
+                <li><Link to="/cancellation-policy" className="hover:text-[#C94F32] transition-colors">Cancellation Policy</Link></li>
               </ul>
             </div>
 
@@ -283,12 +285,13 @@ export const Footer: React.FC<FooterProps> = ({ onSelectCategory, onOpenQuote, v
             <h4 className="font-bold text-sm text-white uppercase tracking-wider">Customer Care</h4>
             <ul className="space-y-2 text-stone-400 text-xs">
               <li><a href="#" className="hover:text-white transition-colors">Track Your Order</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Shipping &amp; Delivery Timelines</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Returns &amp; Replacement Policy</a></li>
+              <li><Link to="/shipping-policy" className="hover:text-white transition-colors">Shipping &amp; Delivery Timelines</Link></li>
+              <li><Link to="/refund-policy" className="hover:text-white transition-colors">Returns &amp; Replacement Policy</Link></li>
+              <li><Link to="/cancellation-policy" className="hover:text-white transition-colors">Cancellation Policy</Link></li>
               <li><a href="#" className="hover:text-white transition-colors">Image Quality &amp; Upload Guide</a></li>
               <li><a href="#" className="hover:text-white transition-colors">Frequently Asked Questions (FAQ)</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Privacy &amp; Data Security</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Terms of Service</a></li>
+              <li><Link to="/privacy-policy" className="hover:text-white transition-colors">Privacy &amp; Data Security</Link></li>
+              <li><Link to="/terms-and-conditions" className="hover:text-white transition-colors">Terms of Service</Link></li>
             </ul>
           </div>
 
