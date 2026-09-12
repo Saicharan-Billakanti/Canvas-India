@@ -202,6 +202,15 @@ export const TermsConditionsPage: React.FC = () => {
           published constitutes acceptance of the revised Terms to the extent permitted by law.
         </p>
       </PolicySection>
+
+      <PolicySection heading="Contact Us">
+        <p>Email: info@canvassindia.com</p>
+        <p>Contact number: 78930 51555</p>
+        <p>
+          Address: Building No./Flat No. H NO 4-9-197/8184, HMT Nagar, HMT Nagar Main Road, Nacharam, Hyderabad,
+          Hyderabad District, Telangana &ndash; 500076
+        </p>
+      </PolicySection>
     </PolicyPageLayout>
   );
 };

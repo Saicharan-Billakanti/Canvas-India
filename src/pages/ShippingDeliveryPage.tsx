@@ -126,6 +126,15 @@ export const ShippingDeliveryPage: React.FC = () => {
         </ul>
         <p>We will, however, make reasonable efforts to assist you in tracking and resolving delayed shipments.</p>
       </PolicySection>
+
+      <PolicySection heading="Contact Us">
+        <p>Email: info@canvassindia.com</p>
+        <p>Contact number: 78930 51555</p>
+        <p>
+          Address: Building No./Flat No. H NO 4-9-197/8184, HMT Nagar, HMT Nagar Main Road, Nacharam, Hyderabad,
+          Hyderabad District, Telangana &ndash; 500076
+        </p>
+      </PolicySection>
     </PolicyPageLayout>
   );
 };

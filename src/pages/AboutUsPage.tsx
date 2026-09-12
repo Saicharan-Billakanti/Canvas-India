@@ -377,6 +377,39 @@ export const AboutUsPage: React.FC = () => {
       </section>
 
       {/* ========================================================================= */}
+      {/* 5b. CONTACT US                                                           */}
+      {/* ========================================================================= */}
+      <section className="w-full py-12 sm:py-16 bg-[#FBF7F0] border-t border-b border-[#EAE3D9]">
+        <div className="w-full max-w-4xl mx-auto px-4 sm:px-8 text-left space-y-2">
+          <span className="text-xs uppercase font-bold tracking-widest text-[#E8752A]">Get in Touch</span>
+          <h2
+            className="text-2xl sm:text-3xl font-bold text-stone-900 tracking-tight mb-2"
+            style={{ fontFamily: 'Georgia, "Times New Roman", serif', fontStyle: 'italic' }}
+          >
+            Contact Us
+          </h2>
+          <div className="text-sm sm:text-base text-stone-700 space-y-1">
+            <p>
+              Email:{' '}
+              <a href="mailto:info@canvassindia.com" className="text-[#0E4A93] font-semibold hover:underline">
+                info@canvassindia.com
+              </a>
+            </p>
+            <p>
+              Contact number:{' '}
+              <a href="tel:+917893051555" className="text-[#0E4A93] font-semibold hover:underline">
+                78930 51555
+              </a>
+            </p>
+            <p>
+              Address: H NO 4-9-197/8184, HMT Nagar, HMT Nagar Main Road, Nacharam, Hyderabad, Hyderabad
+              District, Telangana &ndash; 500076
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ========================================================================= */}
       {/* 6. ABOUT US CTA (Have a Memory Worth Framing?)                           */}
       {/* ========================================================================= */}
       <section className="w-full py-16 sm:py-24 bg-[#082C59] text-white">
