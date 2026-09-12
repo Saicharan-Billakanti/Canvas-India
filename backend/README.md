@@ -57,6 +57,20 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
+## Analytics (Phase 6)
+
+The Analytics module provides consolidated reporting across seven business domains:
+- `GET /analytics/sales` — Sales, AOV, net revenue, tax, and status breakdowns.
+- `GET /analytics/products` — Product performance ranking by volume and revenue.
+- `GET /analytics/customers` — New vs. returning customer growth, AOV, and segments.
+- `GET /analytics/production` — Pipeline job and stage progression, SLA compliance tracking.
+- `GET /analytics/inventory` — Stock levels, low-stock alerts, and movement ledger activity.
+- `GET /analytics/shipping` — Delivery rates, NDR, and RTO analysis by courier.
+- `GET /analytics/profitability` — Revenue, available product COGS, and profit margin.
+
+Protected with `JwtAuthGuard`, `PermissionsGuard`, and `analytics.view` permission.
+See [Analytics Documentation](docs/analytics.md) for full endpoint specifications.
+
 ## Deployment
 
 When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.

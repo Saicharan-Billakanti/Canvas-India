@@ -10,6 +10,7 @@ import { UsersModule } from './users/users.module.js';
 import { RolesModule } from './roles/roles.module.js';
 import { CustomersModule } from './customers/customers.module.js';
 import { CatalogModule } from './catalog/catalog.module.js';
+import { AnalyticsModule } from './analytics/analytics.module.js';
 import { CommerceModule } from './commerce/commerce.module.js';
 import { PaymentsModule } from './payments/payments.module.js';
 import { InventoryModule } from './inventory/inventory.module.js';
@@ -35,6 +36,7 @@ import { GrowthModule } from './growth/growth.module.js';
     ProductionModule,
     ShippingModule,
     GrowthModule,
+    AnalyticsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
