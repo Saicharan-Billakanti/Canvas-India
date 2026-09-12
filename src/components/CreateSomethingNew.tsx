@@ -1,54 +1,34 @@
 import React from 'react';
-import { Sparkles, ArrowRight, Palette, Layers, CircleDot, Sliders } from 'lucide-react';
+import { Sparkles, ArrowRight, Palette, Layers, CircleDot } from 'lucide-react';
 
 interface CreateSomethingNewProps {
   onStartCreating: () => void;
   onSelectCategory: (slug: string) => void;
-  variant?: 'marketplace' | 'print-store' | 'modern';
 }
 
 export const CreateSomethingNew: React.FC<CreateSomethingNewProps> = ({
   onStartCreating,
   onSelectCategory,
-  variant = 'marketplace',
 }) => {
-  const isVersion2 = variant === 'print-store';
-  const isVersion3 = variant === 'modern';
-
   return (
     <section 
       id="customizer-section" 
-      className={`py-12 sm:py-16 border-b transition-colors ${
-        isVersion2 
-          ? 'bg-white border-[#E8E1D9]' 
-          : isVersion3 
-            ? 'bg-[#FAF6F0] border-[#EFE9DF]' 
-            : 'bg-[#FAF8F5] border-stone-200/70'
-      }`}
+      className="w-full bg-white py-12 sm:py-16 border-b border-stone-200/80 transition-colors"
     >
       <div className="w-full max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 xl:px-14">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center">
           
           {/* LEFT COLUMN: Narrative, Headline, Features, CTAs */}
           <div className="lg:col-span-6 space-y-5 text-left">
-            <div className={`inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider ${
-              isVersion2 
-                ? 'text-[#C94F32]' 
-                : isVersion3 
-                  ? 'text-amber-800' 
-                  : 'text-[#102A43]'
-            }`}>
-              <Sparkles className="w-3.5 h-3.5" />
+            <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#E8752A]">
+              <Sparkles className="w-3.5 h-3.5 text-[#E8752A]" />
               <span>Personalized Printing &amp; Custom Art</span>
             </div>
 
             {/* Heading: "Create Something New" */}
-            <h2 className={`text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-[1.1] ${
-              isVersion2 
-                ? 'font-serif italic text-[#171717]' 
-                : 'text-stone-900'
-            }`}
-            style={isVersion2 ? { fontFamily: 'Georgia, "Times New Roman", serif' } : undefined}
+            <h2 
+              className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-[1.1] font-serif italic text-[#111827]"
+              style={{ fontFamily: 'Georgia, "Times New Roman", serif', fontStyle: 'italic' }}
             >
               Create Something New
             </h2>
@@ -66,13 +46,11 @@ export const CreateSomethingNew: React.FC<CreateSomethingNewProps> = ({
                 onClick={() => onSelectCategory('canvas-prints')}
                 className="group flex items-center gap-2.5 text-left cursor-pointer focus:outline-none"
               >
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 ${
-                  isVersion2 ? 'bg-[#C94F32]/10 text-[#C94F32]' : 'bg-stone-200 text-stone-800'
-                }`}>
+                <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 bg-orange-50 text-[#E8752A] border border-orange-200/60">
                   <Palette className="w-4 h-4" />
                 </div>
                 <div>
-                  <div className="text-xs font-bold text-stone-900 group-hover:text-amber-700 transition-colors">Canvas Prints</div>
+                  <div className="text-xs font-bold text-stone-900 group-hover:text-[#0E4A93] transition-colors">Canvas Prints</div>
                   <div className="text-[11px] text-stone-500">From ₹499</div>
                 </div>
               </button>
@@ -82,13 +60,11 @@ export const CreateSomethingNew: React.FC<CreateSomethingNewProps> = ({
                 onClick={() => onSelectCategory('acrylic-prints')}
                 className="group flex items-center gap-2.5 text-left cursor-pointer focus:outline-none"
               >
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 ${
-                  isVersion2 ? 'bg-[#C94F32]/10 text-[#C94F32]' : 'bg-stone-200 text-stone-800'
-                }`}>
+                <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 bg-blue-50 text-[#0E4A93] border border-blue-200/60">
                   <Layers className="w-4 h-4" />
                 </div>
                 <div>
-                  <div className="text-xs font-bold text-stone-900 group-hover:text-amber-700 transition-colors">Acrylic Glass</div>
+                  <div className="text-xs font-bold text-stone-900 group-hover:text-[#0E4A93] transition-colors">Acrylic Glass</div>
                   <div className="text-[11px] text-stone-500">From ₹399</div>
                 </div>
               </button>
@@ -98,13 +74,11 @@ export const CreateSomethingNew: React.FC<CreateSomethingNewProps> = ({
                 onClick={() => onSelectCategory('cork-prints')}
                 className="group flex items-center gap-2.5 text-left cursor-pointer focus:outline-none"
               >
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 ${
-                  isVersion2 ? 'bg-[#C94F32]/10 text-[#C94F32]' : 'bg-stone-200 text-stone-800'
-                }`}>
+                <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 bg-amber-50 text-amber-800 border border-amber-200/60">
                   <CircleDot className="w-4 h-4" />
                 </div>
                 <div>
-                  <div className="text-xs font-bold text-stone-900 group-hover:text-amber-700 transition-colors">Cork Boards</div>
+                  <div className="text-xs font-bold text-stone-900 group-hover:text-[#0E4A93] transition-colors">Cork Boards</div>
                   <div className="text-[11px] text-stone-500">From ₹449</div>
                 </div>
               </button>
@@ -115,13 +89,7 @@ export const CreateSomethingNew: React.FC<CreateSomethingNewProps> = ({
               <button
                 type="button"
                 onClick={onStartCreating}
-                className={`px-7 py-3.5 text-white font-bold text-xs sm:text-sm rounded-xl shadow-md transition-all flex items-center gap-2 cursor-pointer ${
-                  isVersion2
-                    ? 'bg-[#C94F32] hover:bg-[#B34329]'
-                    : isVersion3
-                      ? 'bg-amber-800 hover:bg-amber-900'
-                      : 'bg-[#102A43] hover:bg-[#0B1E36]'
-                }`}
+                className="px-7 py-3.5 bg-[#E8752A] hover:bg-[#D3631A] text-white font-bold text-xs sm:text-sm rounded-xl shadow-md transition-all flex items-center gap-2 cursor-pointer"
               >
                 <span>Start Creating</span>
                 <ArrowRight className="w-4 h-4" />
@@ -130,7 +98,7 @@ export const CreateSomethingNew: React.FC<CreateSomethingNewProps> = ({
               <button
                 type="button"
                 onClick={() => onSelectCategory('canvas-prints')}
-                className="text-xs sm:text-sm font-semibold text-stone-800 hover:text-stone-950 transition-colors cursor-pointer flex items-center gap-1"
+                className="text-xs sm:text-sm font-bold text-[#0E4A93] hover:underline transition-colors cursor-pointer flex items-center gap-1"
               >
                 <span>Explore All Formats →</span>
               </button>
@@ -144,7 +112,7 @@ export const CreateSomethingNew: React.FC<CreateSomethingNewProps> = ({
               {/* Primary Canvas Art Piece */}
               <div 
                 onClick={onStartCreating}
-                className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-xl cursor-pointer group bg-stone-100"
+                className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-xl cursor-pointer group bg-stone-100 border border-stone-200"
               >
                 <img
                   src="https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=800&auto=format&fit=crop&q=80"
@@ -157,7 +125,7 @@ export const CreateSomethingNew: React.FC<CreateSomethingNewProps> = ({
                     <ArrowRight className="w-3.5 h-3.5" />
                   </span>
                 </div>
-                <div className="absolute top-3 left-3 bg-stone-900/80 backdrop-blur-xs text-white text-[11px] font-bold px-2.5 py-1 rounded-lg">
+                <div className="absolute top-3 left-3 bg-[#0E4A93]/90 backdrop-blur-xs text-white text-[11px] font-bold px-2.5 py-1 rounded-lg shadow-sm">
                   Museum Canvas
                 </div>
               </div>
@@ -172,7 +140,7 @@ export const CreateSomethingNew: React.FC<CreateSomethingNewProps> = ({
                   alt="Glossy Acrylic Photo"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                 />
-                <div className="absolute bottom-2 left-2 bg-stone-900/80 text-white text-[9px] font-bold px-2 py-0.5 rounded">
+                <div className="absolute bottom-2 left-2 bg-[#0E4A93]/90 text-white text-[9px] font-bold px-2 py-0.5 rounded shadow-sm">
                   Acrylic Glass
                 </div>
               </div>
@@ -187,7 +155,7 @@ export const CreateSomethingNew: React.FC<CreateSomethingNewProps> = ({
                   alt="Natural Cork Pinboard"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                 />
-                <div className="absolute bottom-2 left-2 bg-stone-900/80 text-white text-[9px] font-bold px-2 py-0.5 rounded">
+                <div className="absolute bottom-2 left-2 bg-stone-900/90 text-white text-[9px] font-bold px-2 py-0.5 rounded shadow-sm">
                   Eco Cork
                 </div>
               </div>

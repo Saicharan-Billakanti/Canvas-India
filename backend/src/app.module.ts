@@ -15,6 +15,8 @@ import { PaymentsModule } from './payments/payments.module.js';
 import { InventoryModule } from './inventory/inventory.module.js';
 import { CustomizationModule } from './customization/customization.module.js';
 import { ProductionModule } from './production/production.module.js';
+import { ShippingModule } from './shipping/shipping.module.js';
+import { GrowthModule } from './growth/growth.module.js';
 
 @Module({
   imports: [
@@ -31,6 +33,8 @@ import { ProductionModule } from './production/production.module.js';
     InventoryModule,
     CustomizationModule,
     ProductionModule,
+    ShippingModule,
+    GrowthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
